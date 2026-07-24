@@ -55,6 +55,14 @@ python .\scripts\upscale_wallpaper.py --input "C:\path\to\image.jpg"
 Outputs are written to `outputs/wallpapers` by default. Use `--mode cover` only when
 cropping is acceptable; the default `--mode preserve` keeps the full composition.
 
+## Example
+
+![Real-ESRGAN comparison](docs/assets/demo-comparison.jpg)
+
+This comparison image is included for technical demonstration only. The underlying artwork
+is user-provided anime artwork; replace it with an image you have permission to redistribute
+before using this repository in a public project or commercial context.
+
 ## License
 
 The skill instructions and wrapper script are released under the MIT License. Real-ESRGAN,
