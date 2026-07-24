@@ -59,9 +59,9 @@ cropping is acceptable; the default `--mode preserve` keeps the full composition
 
 ![Real-ESRGAN comparison](docs/assets/demo-comparison.jpg)
 
-This comparison image is included for technical demonstration only. The underlying artwork
-is user-provided anime artwork; replace it with an image you have permission to redistribute
-before using this repository in a public project or commercial context.
+This comparison image is included for technical demonstration only. The artwork is user-provided
+and carries third-party copyright markings; replace it with an image you have permission to
+redistribute before using this repository in a public project or commercial context.
 
 ## License
 
