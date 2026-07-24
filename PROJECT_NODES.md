@@ -9,7 +9,7 @@ machine paths, no bundled model binaries, and a verified end-to-end run.
 
 ## Current State
 
-- Status: Public GitHub release published.
+- Status: Public GitHub release published with a full-color comparison image.
 - Version: v0.1.0
 - Last verified result: Real-ESRGAN produced a 4x PNG, wallpaper, and comparison image on the
   local RTX 5070 Ti using the release copy.
@@ -48,8 +48,8 @@ test target. Missing input validation also returned the expected non-zero failur
 ## Next Session
 
 1. Read this file and inspect the working tree.
-2. Add comparison screenshots and a GitHub release page if desired.
-3. Consider a v0.2.0 with automatic model setup or broader platform support.
+2. Consider a v0.2.0 with automatic model setup or broader platform support.
+3. Replace the demo artwork if broader redistribution is needed.
 
 ## Update Rule
 
