@@ -9,7 +9,7 @@ machine paths, no bundled model binaries, and a verified end-to-end run.
 
 ## Current State
 
-- Status: Public GitHub release published with a full-color official-style comparison image.
+- Status: Public GitHub release published with a full-color preserved-aspect selected-crop comparison.
 - Version: v0.1.0
 - Last verified result: Real-ESRGAN produced a 4x PNG, wallpaper, and comparison image on the
   local RTX 5070 Ti using the release copy.
