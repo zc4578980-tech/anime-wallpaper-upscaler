@@ -57,7 +57,11 @@ cropping is acceptable; the default `--mode preserve` keeps the full composition
 
 ## Example
 
-![Real-ESRGAN comparison](docs/assets/demo-comparison.jpg)
+![Real-ESRGAN comparison using a preserved-aspect selected crop](docs/assets/demo-comparison.jpg)
+
+The demo uses a portrait crop selected from the source image. Both panels keep the crop's
+original aspect ratio; use `--compare-full-input` when the input file is already the desired
+selection.
 
 This comparison image is included for technical demonstration only. The artwork is user-provided
 and carries third-party copyright markings; replace it with an image you have permission to
