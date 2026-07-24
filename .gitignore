@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+outputs/
+*.bin
+*.param
+realesrgan-ncnn-vulkan.exe
+.DS_Store
