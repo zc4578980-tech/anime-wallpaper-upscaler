@@ -9,8 +9,8 @@ machine paths, no bundled model binaries, and a verified end-to-end run.
 
 ## Current State
 
-- Status: Minimal release preparation complete; repository is ready for remote setup.
-- Version: pre-release v0.1.0
+- Status: Public GitHub release published.
+- Version: v0.1.0
 - Last verified result: Real-ESRGAN produced a 4x PNG, wallpaper, and comparison image on the
   local RTX 5070 Ti using the release copy.
 
@@ -42,15 +42,14 @@ test target. Missing input validation also returned the expected non-zero failur
 
 ## Blockers And Risks
 
-- No remote GitHub URL or owner has been configured yet.
 - The release currently targets Windows with a Vulkan-capable GPU.
-- README still contains the placeholder `YOUR-USERNAME` until a repository owner is chosen.
+- Real-ESRGAN executable and model files remain external dependencies.
 
 ## Next Session
 
 1. Read this file and inspect the working tree.
-2. Replace the README repository placeholder and add comparison screenshots if available.
-3. Create a GitHub repository, add its remote, commit, and push after reviewing the license.
+2. Add comparison screenshots and a GitHub release page if desired.
+3. Consider a v0.2.0 with automatic model setup or broader platform support.
 
 ## Update Rule
 
