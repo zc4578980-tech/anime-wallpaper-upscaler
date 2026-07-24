@@ -45,6 +45,7 @@ Important options:
 - `--target 2560x1440`: suitable for a 16:9 monitor.
 - `--mode preserve`: keeps the full composition and fills extra space with a blurred backdrop.
 - `--mode cover`: crops to fill the target exactly; use only when cropping is accepted.
+- `--compare-full-input`: use the whole input image for the comparison without a second crop.
 - `--x-bias` and `--y-bias`: adjust the crop position in cover mode.
 - `--model realesrgan-x4plus-anime`: preferred for anime and illustration images.
 
