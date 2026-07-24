@@ -56,17 +56,25 @@ def polish(img: Image.Image) -> Image.Image:
     return img.filter(ImageFilter.UnsharpMask(radius=0.7, percent=35, threshold=3))
 
 
-def make_compare(original_path: Path, upscaled_path: Path, out_path: Path) -> None:
+def make_compare(
+    original_path: Path,
+    upscaled_path: Path,
+    out_path: Path,
+    full_input: bool = False,
+) -> None:
     orig = Image.open(original_path).convert("RGB")
     up = Image.open(upscaled_path).convert("RGB")
     ow, oh = orig.size
-    box = (
+    box = (0, 0, ow, oh) if full_input else (
         round(ow * 0.36),
         round(oh * 0.13),
         round(ow * 0.54),
         round(oh * 0.46),
     )
-    normal = orig.crop(box).resize((440, 440), Image.Resampling.LANCZOS)
+    crop = orig.crop(box)
+    scale = min(520 / crop.width, 720 / crop.height)
+    panel_size = (max(1, round(crop.width * scale)), max(1, round(crop.height * scale)))
+    normal = crop.resize(panel_size, Image.Resampling.LANCZOS)
     sx = up.width / ow
     sy = up.height / oh
     up_box = (
@@ -75,14 +83,15 @@ def make_compare(original_path: Path, upscaled_path: Path, out_path: Path) -> No
         round(box[2] * sx),
         round(box[3] * sy),
     )
-    ai_crop = up.crop(up_box).resize((440, 440), Image.Resampling.LANCZOS)
-    canvas = Image.new("RGB", (900, 490), "white")
+    ai_crop = up.crop(up_box).resize(panel_size, Image.Resampling.LANCZOS)
+    canvas = Image.new("RGB", (panel_size[0] * 2 + 20, panel_size[1] + 50), "white")
     canvas.paste(normal, (0, 50))
-    canvas.paste(ai_crop, (460, 50))
+    canvas.paste(ai_crop, (panel_size[0] + 20, 50))
     draw = ImageDraw.Draw(canvas)
     draw.text((10, 15), "Normal upscale", fill=(0, 0, 0))
-    draw.text((470, 15), "Real-ESRGAN AI upscale", fill=(0, 0, 0))
-    draw.line((450, 0, 450, 490), fill=(180, 180, 180), width=2)
+    draw.text((panel_size[0] + 30, 15), "Real-ESRGAN AI upscale", fill=(0, 0, 0))
+    divider_x = panel_size[0] + 10
+    draw.line((divider_x, 0, divider_x, canvas.height), fill=(180, 180, 180), width=2)
     canvas.save(out_path, quality=95)
 
 
@@ -95,6 +104,11 @@ def main() -> None:
     parser.add_argument("--target", default="2560x1600")
     parser.add_argument("--mode", choices=["preserve", "cover"], default="preserve")
     parser.add_argument("--copy-desktop", action="store_true")
+    parser.add_argument(
+        "--compare-full-input",
+        action="store_true",
+        help="Use the whole input image for the comparison without a second crop.",
+    )
     parser.add_argument("--x-bias", default=0.5, type=float)
     parser.add_argument("--y-bias", default=0.5, type=float)
     args = parser.parse_args()
@@ -145,7 +159,7 @@ def main() -> None:
         full_16_9.save(args.out_dir / f"{stem}_wallpaper_AI_2560x1440_full.jpg", quality=97, optimize=True, subsampling=0)
 
     compare_path = args.out_dir / f"{stem}_AI_compare.jpg"
-    make_compare(source, upscaled, compare_path)
+    make_compare(source, upscaled, compare_path, full_input=args.compare_full_input)
 
     desktop_path = None
     if args.copy_desktop:
