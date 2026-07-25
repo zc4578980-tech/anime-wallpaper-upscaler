@@ -8,7 +8,7 @@ from pathlib import Path
 from PIL import Image, UnidentifiedImageError
 
 from .discovery import InputJob
-from .errors import UserInputError
+from .errors import DependencyError, UserInputError
 from .imaging import (
     cover_resize,
     make_compare,
@@ -80,12 +80,16 @@ def _validate_source_image(source: Path) -> None:
         raise _invalid_image_error(source) from exc
 
 
-def _decode_upscaled_image(upscaled: Path, source: Path) -> Image.Image:
+def _decode_upscaled_image(upscaled: Path) -> Image.Image:
     try:
         with Image.open(upscaled) as image:
             return image.convert("RGB")
     except (UnidentifiedImageError, OSError) as exc:
-        raise _invalid_image_error(source) from exc
+        raise DependencyError(
+            "Real-ESRGAN did not produce a readable output image at: "
+            f"{upscaled}. Run .\\setup.ps1 again and retry; if the problem "
+            "continues, check the upstream diagnostics."
+        ) from exc
 
 
 def process_image(
@@ -115,7 +119,7 @@ def process_image(
         scale=options.scale,
         gpu=options.gpu,
     )
-    image = _decode_upscaled_image(upscaled, job.source)
+    image = _decode_upscaled_image(upscaled)
 
     if options.mode == "cover":
         finished = cover_resize(

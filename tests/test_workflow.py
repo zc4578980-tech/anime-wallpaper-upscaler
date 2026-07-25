@@ -4,6 +4,7 @@ import pytest
 from PIL import Image
 
 from anime_wallpaper_upscaler.discovery import InputJob
+from anime_wallpaper_upscaler.errors import DependencyError, UserInputError
 from anime_wallpaper_upscaler.realesrgan import RuntimeFiles
 from anime_wallpaper_upscaler.workflow import (
     BatchSummary,
@@ -112,15 +113,21 @@ def test_process_image_can_remove_intermediate_and_copy_wallpaper(
     assert result.desktop.read_bytes() == result.wallpaper.read_bytes()
 
 
-def test_damaged_upscale_has_actionable_source_specific_error(tmp_path: Path) -> None:
+@pytest.mark.parametrize("write_corrupt_output", (False, True))
+def test_missing_or_unreadable_upscale_reports_runtime_repair(
+    tmp_path: Path,
+    write_corrupt_output: bool,
+) -> None:
     source = tmp_path / "damaged.webp"
     Image.new("RGB", (40, 30), "red").save(source)
     output = tmp_path / "out"
+    expected_upscaled = output / "damaged_realesrgan_3x.png"
 
     def damaged_upscale(**kwargs: object) -> None:
-        Path(kwargs["output_path"]).write_bytes(b"not an image either")
+        if write_corrupt_output:
+            Path(kwargs["output_path"]).write_bytes(b"not an image")
 
-    with pytest.raises(RuntimeError) as caught:
+    with pytest.raises(DependencyError) as caught:
         process_image(
             InputJob(source, output, output),
             options(tmp_path),
@@ -128,9 +135,9 @@ def test_damaged_upscale_has_actionable_source_specific_error(tmp_path: Path) ->
         )
 
     message = str(caught.value)
-    assert str(source) in message
-    assert "damaged or unsupported" in message
-    assert "JPG, JPEG, PNG, or WebP" in message
+    assert str(expected_upscaled) in message
+    assert r"setup.ps1" in message
+    assert "upstream diagnostics" in message
 
 
 def test_damaged_source_is_rejected_before_gpu_upscale(tmp_path: Path) -> None:
@@ -143,7 +150,7 @@ def test_damaged_source_is_rejected_before_gpu_upscale(tmp_path: Path) -> None:
         nonlocal runner_called
         runner_called = True
 
-    with pytest.raises(RuntimeError, match="damaged or unsupported"):
+    with pytest.raises(UserInputError, match="damaged or unsupported"):
         process_image(
             InputJob(source, output, output),
             options(tmp_path),
