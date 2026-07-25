@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - codex/v0.2.0-integration
   pull_request:
   workflow_dispatch:
 
