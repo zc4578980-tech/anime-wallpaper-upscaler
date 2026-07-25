@@ -6,7 +6,7 @@
 
 [English](README.md)
 
-![输入区域、官方 Real-ESRGAN 超分与保留完整构图的成品壁纸](docs/assets/workflow-overview.jpg)
+![原创输入图、官方 Real-ESRGAN 超分与保留完整构图的成品壁纸](docs/assets/workflow-overview.jpg)
 
 在仓库根目录运行一次安装命令：
 
@@ -16,8 +16,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 
 然后把图片或文件夹拖到 `scripts\run-wallpaper.cmd` 或桌面快捷方式上，并选择 2、3、4 倍率。
 
-上方概览把同一个保留竖向区域依次用于输入、官方上游推理和壁纸构图，仅作技术演示；其独立
-权利状态和删除联系方式见[演示素材声明](docs/assets/NOTICE.md)。
+上方概览把一张可重复生成的原创技术图依次用于输入、官方上游推理和壁纸构图。该源图及仓库
+内的衍生演示图允许再分发，来源说明见[演示素材声明](docs/assets/NOTICE.md)。
 
 ## 本项目与官方 Real-ESRGAN 的区别
 
@@ -142,15 +142,19 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 仓库用脚本保证概览图可重复生成，不依赖手工拼图：
 
 ```powershell
+python .\scripts\build_original_demo.py `
+  --output ".\docs\assets\demo-source-original.png"
+
 python .\scripts\build_demo_assets.py `
-  --source "C:\Demo\original.png" `
+  --source ".\docs\assets\demo-source-original.png" `
   --upscaled "C:\Demo\original_realesrgan_4x.png" `
   --wallpaper "C:\Demo\original_wallpaper.jpg" `
   --overview ".\docs\assets\workflow-overview.jpg" `
   --social-preview ".\docs\assets\social-preview.jpg"
 ```
 
-三联图中的每个面板都会完整 contain-fit，不裁切内容。请只使用自己创作或明确获准再分发的原图。
+仓库自带源图是带四种彩色边角标记的项目原创技术场景。三联图中的每个面板都会完整
+contain-fit，不裁切内容；替换素材时仍应只使用自己创作或明确获准再分发的原图。
 
 ## 上游署名与许可证
 
@@ -159,7 +163,6 @@ python .\scripts\build_demo_assets.py `
 [ncnn](https://github.com/Tencent/ncnn) 的集成封装。推理代码、模型、可执行程序及相关组件继续
 适用各自的上游许可证，详见[第三方声明](THIRD_PARTY_NOTICES.md)。
 
-MIT 许可证仅适用于本仓库自己的封装代码和文档，并受[演示素材声明](docs/assets/NOTICE.md)中的
-排除项约束。保留的对比图及未来由它衍生的概览图/社交预览图归各自权利人所有；“可联系删除”
-这句话本身不授予任何再分发权。权利人可在
-[项目 Issues](https://github.com/zc4578980-tech/anime-wallpaper-upscaler/issues) 提出删除请求。
+MIT 许可证适用于本仓库自己的封装代码、文档，以及[演示素材声明](docs/assets/NOTICE.md)中列出的
+原创演示资产。这不会重新许可、删除或弱化上游推理代码、模型、可执行程序及依赖各自适用的
+许可证、声明和署名。

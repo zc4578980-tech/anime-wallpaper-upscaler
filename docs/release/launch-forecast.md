@@ -38,3 +38,11 @@ remains excluded from `launch-plan.json`.
 This blocks a formal v0.2.0 Release even though the technical acceptance suite passes. Do not
 tag, push, announce, or change this status until real placement and referrer evidence satisfies
 the checked-in validator.
+
+## Demo Asset Status: 2026-07-25
+
+The checked-in comparison, workflow overview, and social preview now derive from the original
+MIT-licensed `demo-source-original.png` and a real local official Real-ESRGAN 4x run on GPU 0.
+This removes the earlier third-party-artwork promotion risk. The 60-90 second controlled-window
+recording remains blocked because a verified FFmpeg package could not be acquired within the
+five-minute stop-loss; no simulated terminal recording was substituted.

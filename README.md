@@ -6,7 +6,7 @@ it is not an original super-resolution algorithm or model.
 
 [简体中文](README.zh-CN.md)
 
-![Input crop, official Real-ESRGAN upscale, and finished composition-preserving wallpaper](docs/assets/workflow-overview.jpg)
+![Original input, official Real-ESRGAN upscale, and finished composition-preserving wallpaper](docs/assets/workflow-overview.jpg)
 
 Run the one-time setup from the repository root:
 
@@ -17,9 +17,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 Then drag images or folders onto `scripts\run-wallpaper.cmd` or the desktop shortcut and
 choose scale 2, 3, or 4.
 
-The overview uses the same retained portrait selection through input, official upstream
-inference, and wallpaper composition. It is included only as a technical demonstration; see
-[Asset Notice](docs/assets/NOTICE.md) for its separate rights status and removal contact.
+The overview uses a deterministic original fixture through input, official upstream inference,
+and wallpaper composition. The fixture and its derived repository images are redistributable;
+see [Asset Notice](docs/assets/NOTICE.md) for provenance.
 
 ## How This Differs from Official Real-ESRGAN
 
@@ -154,16 +154,20 @@ line per item. A bad image does not stop the remaining batch; partial failure re
 The repository keeps generation reproducible instead of editing overview graphics by hand:
 
 ```powershell
+python .\scripts\build_original_demo.py `
+  --output ".\docs\assets\demo-source-original.png"
+
 python .\scripts\build_demo_assets.py `
-  --source "C:\Demo\original.png" `
+  --source ".\docs\assets\demo-source-original.png" `
   --upscaled "C:\Demo\original_realesrgan_4x.png" `
   --wallpaper "C:\Demo\original_wallpaper.jpg" `
   --overview ".\docs\assets\workflow-overview.jpg" `
   --social-preview ".\docs\assets\social-preview.jpg"
 ```
 
-The triptych contains each panel without cropping. Only use source artwork you created or have
-clear permission to redistribute.
+The included fixture is a project-authored technical scene with four colored edge markers. The
+triptych contains each panel without cropping. For a replacement, use only artwork you created
+or have clear permission to redistribute.
 
 ## Attribution and License
 
@@ -174,9 +178,7 @@ This project is an integration wrapper built on
 components remain under their respective upstream licenses; see
 [Third-Party Notices](THIRD_PARTY_NOTICES.md).
 
-The MIT License applies only to this repository's own wrapper code and documentation, subject
-to the exclusions in [Asset Notice](docs/assets/NOTICE.md). The retained comparison and any
-derived overview/social preview belong to their respective rights holder and are not granted
-for redistribution by the removal-request sentence. A rights holder may request removal by
-opening an issue at
-[github.com/zc4578980-tech/anime-wallpaper-upscaler/issues](https://github.com/zc4578980-tech/anime-wallpaper-upscaler/issues).
+The MIT License applies to this repository's own wrapper code, documentation, and original demo
+assets identified in [Asset Notice](docs/assets/NOTICE.md). This does not relicense or weaken any
+license, notice, or attribution that applies to the upstream inference code, models, executable,
+or dependencies.
