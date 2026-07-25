@@ -1,12 +1,16 @@
 # Anime Wallpaper Upscaler
 
-**Lightweight Windows and Agent Skill built on official Real-ESRGAN.** Ask an Agent in plain
-language, use drag/drop, or call the CLI to create screen-ready wallpapers while keeping the
-complete composition by default.
+**Turn anime, illustration, and game images into screen-ready Windows wallpapers without
+silently cropping the composition.** Use one-click setup, drag/drop, an Agent, or the CLI; the
+default `preserve` mode keeps the complete image and fills spare screen space with a softened
+backdrop.
 
-The Skill and repository stay lightweight; first setup downloads and verifies the pinned
-official `realesrgan-ncnn-vulkan` runtime and models. Real-ESRGAN and ncnn perform the inference:
-this project is a workflow integration, not an original super-resolution algorithm or model.
+**Lightweight Windows workflow and Agent Skill built on official Real-ESRGAN.** First setup
+downloads and verifies the official runtime; afterward, process a file or a whole folder at
+2x/3x/4x with automatic screen and Vulkan GPU detection.
+
+Real-ESRGAN and ncnn perform the inference. This repository provides the Windows wallpaper
+workflow around them, not an original super-resolution algorithm or model.
 
 [简体中文](README.zh-CN.md)
 

@@ -1,11 +1,14 @@
 # Anime Wallpaper Upscaler
 
-**基于官方 Real-ESRGAN 的轻量 Windows 工具与 Agent Skill。** 你可以直接用自然语言告诉 Agent，
-也可以拖放图片或使用命令行；工作流默认保留完整原图构图，并生成适配屏幕的壁纸。
+**把动漫、插画和游戏图片做成适配屏幕的 Windows 壁纸，并且不悄悄裁掉原始构图。** 可以一键
+安装、拖放图片、交给 Agent 或使用命令行；默认 `preserve` 模式保留完整图片，用柔化背景填满
+屏幕比例的剩余区域。
 
-轻量指 Skill 和仓库封装本身；首次配置仍会自动下载并校验固定版本的官方
-`realesrgan-ncnn-vulkan` 运行时与模型。真正执行推理的是 Real-ESRGAN 和 ncnn；本项目不是原创
-超分算法或模型。
+**基于官方 Real-ESRGAN 的轻量 Windows 工作流与 Agent Skill。** 首次安装会下载并校验官方
+运行时；之后可处理单张图片或整个文件夹，支持 2x/3x/4x、自动屏幕检测和 Vulkan GPU 检测。
+
+真正执行推理的是 Real-ESRGAN 和 ncnn；本仓库提供的是围绕它们的 Windows 壁纸工作流，
+不是原创超分算法或模型。
 
 [English](README.md)
 
