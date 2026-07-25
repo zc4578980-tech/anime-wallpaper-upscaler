@@ -25,8 +25,10 @@ runtime. Drop files or a folder onto the shortcut, choose 2x/3x/4x, and it detec
 screen and available Vulkan GPU. The default output keeps the whole image and fills the spare
 ratio with a softened copy instead of cutting off the edges.
 
-It needs Windows 10/11, Python 3.10+, and a Vulkan-capable GPU. Images stay local. Setup and
-troubleshooting: https://github.com/zc4578980-tech/anime-wallpaper-upscaler
+It needs Windows 10/11 and a Vulkan-capable GPU. Double-click setup can install Python per-user
+through winget after confirmation, then downloads and verifies the official executable and all
+required models automatically. Images stay local. Setup and troubleshooting:
+https://github.com/zc4578980-tech/anime-wallpaper-upscaler
 
 ## Real-ESRGAN Audience
 

@@ -162,6 +162,51 @@ try {
     Assert-Equal $runtimeRoot $installed "valid existing runtime is reused"
     Assert-Equal $before (Get-Item -LiteralPath (Join-Path $runtimeRoot "realesrgan-ncnn-vulkan.exe")).LastWriteTimeUtc "valid existing runtime is untouched"
 
+    $modelManifest = [pscustomobject]@{
+        requiredFiles = @(
+            "realesrgan-ncnn-vulkan.exe",
+            "models/realesr-animevideov3-x2.param",
+            "models/realesr-animevideov3-x2.bin",
+            "models/realesr-animevideov3-x3.param",
+            "models/realesr-animevideov3-x3.bin",
+            "models/realesrgan-x4plus-anime.param",
+            "models/realesrgan-x4plus-anime.bin"
+        )
+    }
+    $modelRuntime = Join-Path $script:testRoot "model-validation"
+    foreach ($relativePath in $modelManifest.requiredFiles) {
+        $requiredPath = Join-Path $modelRuntime $relativePath
+        New-Item -ItemType Directory -Path (Split-Path -Parent $requiredPath) -Force | Out-Null
+        Set-Content -LiteralPath $requiredPath -Value "fixture"
+    }
+    Assert-True (Test-RuntimeInstall -InstallPath $modelRuntime -Manifest $modelManifest) "runtime is valid only after the executable and every pinned model file exist"
+    Remove-Item -LiteralPath (Join-Path $modelRuntime "models/realesr-animevideov3-x3.bin") -Force
+    Assert-True (-not (Test-RuntimeInstall -InstallPath $modelRuntime -Manifest $modelManifest)) "a missing pinned model invalidates the runtime and requires automatic repair"
+
+    $script:observedWingetArguments = @()
+    $expectedLauncher = [pscustomobject]@{
+        Command = "C:\Users\Test\Python312\python.exe"
+        PrefixArguments = @()
+    }
+    $installedLauncher = Install-PythonWithWinget `
+        -Accepted `
+        -WingetInvoker {
+            param([string[]]$Arguments)
+            $script:observedWingetArguments = @($Arguments)
+            return 0
+        } `
+        -LauncherResolver { return $expectedLauncher }
+    Assert-Equal $expectedLauncher.Command $installedLauncher.Command "winget bootstrap returns the newly installed Python launcher"
+    Assert-True ($script:observedWingetArguments -contains "Python.Python.3.12") "winget bootstrap pins the official Python 3.12 package"
+    Assert-True ($script:observedWingetArguments -contains "--scope") "winget bootstrap declares an installation scope"
+    Assert-True ($script:observedWingetArguments -contains "user") "winget bootstrap installs Python for the current user"
+    Assert-True ($script:observedWingetArguments -contains "--accept-package-agreements") "winget bootstrap accepts package agreements only after user consent"
+    Assert-True ($script:observedWingetArguments -contains "--accept-source-agreements") "winget bootstrap accepts source agreements only after user consent"
+
+    $installerEntry = Get-Content -LiteralPath (Join-Path $projectRoot "install.cmd") -Raw
+    Assert-True ($installerEntry -match "setup\.ps1") "double-click installer delegates to the reviewed PowerShell setup"
+    Assert-True ($installerEntry -notmatch "AcceptUpstreamLicense") "double-click installer does not bypass upstream license confirmation"
+
     $source = Join-Path $script:testRoot "skill-source"
     $destination = Join-Path $script:testRoot "skill-destination"
     New-Item -ItemType Directory -Path $source, $destination | Out-Null

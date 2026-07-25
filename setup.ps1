@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [switch]$AcceptUpstreamLicense,
+    [switch]$InstallPython,
     [switch]$SkipSkill,
     [switch]$SkipShortcut,
     [switch]$ReplaceSkillLink
@@ -9,7 +10,8 @@ param(
 $ErrorActionPreference = "Stop"
 $script:ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $script:PythonRepair = @"
-Install 64-bit Python 3.10 or newer from:
+Double-click install.cmd and approve the offered per-user Python installation, or install
+64-bit Python 3.10 or newer from:
 https://www.python.org/downloads/windows/
 During installation, enable "Add python.exe to PATH", then open a new PowerShell window.
 "@
@@ -29,12 +31,14 @@ function Assert-SupportedEnvironment {
     }
 }
 
-function Get-PythonLauncher {
+function Find-PythonLauncher {
     $candidates = @(
         [pscustomobject]@{ Command = "python.exe"; PrefixArguments = @() },
         [pscustomobject]@{ Command = "python"; PrefixArguments = @() },
         [pscustomobject]@{ Command = "py.exe"; PrefixArguments = @("-3") },
-        [pscustomobject]@{ Command = "py"; PrefixArguments = @("-3") }
+        [pscustomobject]@{ Command = "py"; PrefixArguments = @("-3") },
+        [pscustomobject]@{ Command = (Join-Path $env:LocalAppData "Programs\Python\Python312\python.exe"); PrefixArguments = @() },
+        [pscustomobject]@{ Command = (Join-Path $env:ProgramFiles "Python312\python.exe"); PrefixArguments = @() }
     )
 
     $seen = @{}
@@ -61,7 +65,88 @@ function Get-PythonLauncher {
         }
     }
 
-    throw "Python 3.10 or newer was not found.`n$script:PythonRepair"
+    return $null
+}
+
+function Invoke-WingetPythonInstall {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string[]]$Arguments
+    )
+
+    $winget = Get-Command "winget.exe" -ErrorAction SilentlyContinue
+    if ($null -eq $winget) {
+        throw "Windows Package Manager (winget) is not available.`n$script:PythonRepair"
+    }
+    & $winget.Source @Arguments 2>&1 | Out-Host
+    return $LASTEXITCODE
+}
+
+function Install-PythonWithWinget {
+    [CmdletBinding()]
+    param(
+        [switch]$Accepted,
+
+        [scriptblock]$WingetInvoker,
+
+        [scriptblock]$LauncherResolver
+    )
+
+    if (-not $Accepted) {
+        throw "Python installation requires explicit consent. No system package was changed."
+    }
+    if ($null -eq $WingetInvoker) {
+        $WingetInvoker = ${function:Invoke-WingetPythonInstall}
+    }
+    if ($null -eq $LauncherResolver) {
+        $LauncherResolver = ${function:Find-PythonLauncher}
+    }
+
+    $arguments = @(
+        "install",
+        "--id", "Python.Python.3.12",
+        "--exact",
+        "--source", "winget",
+        "--scope", "user",
+        "--silent",
+        "--disable-interactivity",
+        "--accept-package-agreements",
+        "--accept-source-agreements"
+    )
+    Write-Host "Installing official Python 3.12 for the current user with winget"
+    [int]$exitCode = & $WingetInvoker -Arguments $arguments
+    if ($exitCode -ne 0) {
+        throw "winget could not install Python (exit code $exitCode).`n$script:PythonRepair"
+    }
+
+    $launcher = & $LauncherResolver
+    if ($null -eq $launcher) {
+        throw "Python installation completed, but Python 3.10 or newer could not be located.`n$script:PythonRepair"
+    }
+    return $launcher
+}
+
+function Get-PythonLauncher {
+    [CmdletBinding()]
+    param(
+        [switch]$InstallIfMissing
+    )
+
+    $launcher = Find-PythonLauncher
+    if ($null -ne $launcher) {
+        return $launcher
+    }
+
+    $accepted = $InstallIfMissing
+    if (-not $accepted) {
+        Write-Host "Python 3.10 or newer was not found."
+        $answer = Read-Host "Install official Python 3.12 for the current user with winget? [Y/N]"
+        $accepted = $answer -match "^[Yy]$"
+    }
+    if (-not $accepted) {
+        throw "Python installation was declined.`n$script:PythonRepair"
+    }
+    return Install-PythonWithWinget -Accepted
 }
 
 function Invoke-PythonLauncher {
@@ -192,7 +277,32 @@ function Invoke-HttpDownload {
         }
         $responseStream = $response.GetResponseStream()
         $fileStream = [System.IO.File]::Open($Destination, $fileMode, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
-        $responseStream.CopyTo($fileStream)
+        $startingOffset = 0L
+        if ($fileMode -eq [System.IO.FileMode]::Append) {
+            $startingOffset = $ResumeFrom
+        }
+        $expectedTotal = $startingOffset + [Math]::Max(0L, [int64]$response.ContentLength)
+        $written = $startingOffset
+        $buffer = New-Object byte[] (1024 * 1024)
+        $progressTimer = [System.Diagnostics.Stopwatch]::StartNew()
+        while (($read = $responseStream.Read($buffer, 0, $buffer.Length)) -gt 0) {
+            $fileStream.Write($buffer, 0, $read)
+            $written += $read
+            if ($progressTimer.ElapsedMilliseconds -ge 250) {
+                $progressTimer.Restart()
+                $progress = @{
+                    Activity = "Downloading official Real-ESRGAN executable and models"
+                    Status = "$written bytes received"
+                }
+                if ($expectedTotal -gt 0) {
+                    $percent = [Math]::Min(100, [Math]::Floor(($written * 100.0) / $expectedTotal))
+                    $progress.Status = "$written / $expectedTotal bytes"
+                    $progress.PercentComplete = $percent
+                }
+                Write-Progress @progress
+            }
+        }
+        Write-Progress -Activity "Downloading official Real-ESRGAN executable and models" -Completed
         return $statusCode
     }
     finally {
@@ -488,14 +598,15 @@ function Invoke-Setup {
     [CmdletBinding()]
     param(
         [switch]$AcceptUpstreamLicense,
+        [switch]$InstallPython,
         [switch]$SkipSkill,
         [switch]$SkipShortcut,
         [switch]$ReplaceSkillLink
     )
 
     Assert-SupportedEnvironment
-    $launcher = Get-PythonLauncher
     Confirm-UpstreamLicenseNotice -Accepted:$AcceptUpstreamLicense
+    $launcher = Get-PythonLauncher -InstallIfMissing:$InstallPython
     $venvPython = Install-PythonEnvironment -Launcher $launcher
     $null = Install-UpstreamRuntime
     if (-not $SkipSkill) {
@@ -510,7 +621,8 @@ function Invoke-Setup {
     if ($LASTEXITCODE -ne 0) {
         throw "Setup smoke test failed with exit code $LASTEXITCODE."
     }
-    Write-Host "Setup complete. The official Real-ESRGAN runtime is ready."
+    Write-Host "Setup complete. The official Real-ESRGAN executable and all pinned 2x/3x/4x models are ready."
+    Write-Host "No manual model download or model-folder setup is required."
 }
 
 if ($env:AUPS_TESTING -ne "1") {

@@ -8,13 +8,17 @@
 
 ![原创输入图、官方 Real-ESRGAN 超分与保留完整构图的成品壁纸](docs/assets/workflow-overview.jpg)
 
-在仓库根目录运行一次安装命令：
+克隆或解压仓库后，双击 `install.cmd`。阅读脚本显示的上游来源和许可证提示，再确认下载即可；
+不需要自己安装 Real-ESRGAN 可执行程序或模型。
+
+等价的 PowerShell 命令是：
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
 然后把图片或文件夹拖到 `scripts\run-wallpaper.cmd` 或桌面快捷方式上，并选择 2、3、4 倍率。
+如果以后本地组件被删除或不完整，启动器会自动进入同一个校验安装流程，修复后继续处理。
 
 上方概览把一张可重复生成的原创技术图依次用于输入、官方上游推理和壁纸构图。该源图及仓库
 内的衍生演示图允许再分发，来源说明见[演示素材声明](docs/assets/NOTICE.md)。
@@ -36,7 +40,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 ## 环境要求
 
 - 64 位 Windows 10/11，PowerShell 5.1 或更高版本。
-- Python 3.10 或更高版本。
+- 为获得最简单的首次安装体验，建议系统有 Windows Package Manager（`winget`）。缺少 Python
+  时，安装器会在用户确认后用 winget 为当前用户安装官方 Python 3.12。
+- 也可以预先安装 64 位 Python 3.10 或更高版本。
 - 支持 Vulkan 的 GPU，以及较新的 NVIDIA、AMD 或 Intel 驱动。
 - 足够存放官方程序、模型和输出图片的磁盘空间。
 
@@ -44,22 +50,24 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 
 ## 安装
 
-克隆仓库、进入目录，然后运行首屏中的安装命令。安装器会：
+双击 `install.cmd`，或运行上方等价的 PowerShell 命令。安装器会：
 
-1. 展示上游来源和许可证提示；
-2. 创建项目本地 `.venv` 并安装 `requirements.txt`；
-3. 把固定版本的官方 Real-ESRGAN Windows 发行包下载到已忽略的 `tools/`；
-4. 解压前校验文件大小和 SHA-256；
-5. 安装 Codex skill junction，并创建拖放桌面快捷方式；
-6. 运行命令行帮助冒烟测试。
+1. 下载前展示上游来源和许可证提示；
+2. 查找 Python；缺少时，在用户确认后通过 `winget` 按当前用户安装官方 Python 3.12；
+3. 创建项目本地 `.venv` 并安装 `requirements.txt`；
+4. 把固定版本的官方 Real-ESRGAN Windows 发行包下载到已忽略的 `tools/`；
+5. 校验压缩包大小和 SHA-256，并确认可执行程序及固定的 2x/3x/4x 模型全部存在，再原子安装；
+6. 安装 Codex skill junction，并创建拖放桌面快捷方式；
+7. 运行命令行帮助冒烟测试。
 
-官方可执行程序和模型只在安装时从上游下载，绝不会提交到本仓库。无人值守安装前，请先阅读
-[第三方声明](THIRD_PARTY_NOTICES.md)，再使用 `-AcceptUpstreamLicense`。网络中断时，受控的临时
-文件保留在 `tools\.downloads`，重新运行安装器可以续传。
+官方可执行程序和全部必需模型由安装器自动从上游下载，绝不会提交到本仓库。普通用户不应
+自己下载或移动模型文件。无人值守安装前，请先阅读[第三方声明](THIRD_PARTY_NOTICES.md)，再使用
+`-AcceptUpstreamLicense`；只有同时授权为当前用户安装 Python 时才附加 `-InstallPython`。网络
+中断时，受控的临时文件保留在 `tools\.downloads`，重新运行安装器可以续传。
 
-### 手动使用官方运行时
+### 高级恢复：使用已有官方运行时
 
-高级用户可自行下载官方 Windows 压缩包，然后把解压目录传给封装脚本：
+这不是普通安装步骤。已经自行维护官方运行时的高级用户，可以把解压目录传给封装脚本：
 
 ```powershell
 .\.venv\Scripts\python.exe .\scripts\upscale_wallpaper.py `
@@ -99,7 +107,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 | `--model MODEL` | 覆盖按倍率自动选择的上游模型 |
 | `--mode {preserve,cover}` | 默认 `preserve`；`cover` 会裁切以铺满屏幕 |
 | `--out-dir PATH` | 把整批结果放到指定目录 |
-| `--tool-dir PATH` | 使用手动安装的官方可执行程序和模型目录 |
+| `--tool-dir PATH` | 高级覆盖：使用已有的官方运行时目录 |
 | `--copy-desktop` | 额外复制每张成品壁纸到当前用户桌面 |
 | `--compare-full-input` | 对比完整输入，而不是默认细节区域 |
 | `--x-bias 0..1` / `--y-bias 0..1` | 调整 `cover` 裁切位置；默认 `0.5` |
@@ -130,9 +138,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 
 | 现象 | 处理方法 |
 | --- | --- |
-| 找不到 Python，或版本低于 3.10 | 从 [python.org](https://www.python.org/downloads/windows/) 安装 64 位 Python，勾选 **Add python.exe to PATH**，新开 PowerShell 后重跑 `setup.ps1` |
-| 下载中断或网络失败 | 检查是否能访问 GitHub Releases，再重跑 `setup.ps1`；受校验约束的部分下载会保留以便续传 |
-| 缺少可执行程序或模型 | 重跑 `setup.ps1`，或用 `--tool-dir` 指向已解压的官方目录 |
+| 找不到 Python，或版本低于 3.10 | 双击 `install.cmd` 并确认按当前用户安装 Python；若没有 `winget`，从 [python.org](https://www.python.org/downloads/windows/) 安装 64 位 Python、勾选 **Add python.exe to PATH**，再重跑 `install.cmd` |
+| 下载中断或网络失败 | 检查是否能访问 GitHub Releases，再重跑 `install.cmd`；受校验约束的部分下载会保留以便续传 |
+| 缺少可执行程序或模型 | 直接启动快捷方式或重跑 `install.cmd`；安装器会自动恢复固定的官方程序和模型 |
 | 未发现 Vulkan GPU / Vulkan 初始化失败 | 更新 [NVIDIA](https://www.nvidia.com/Download/index.aspx)、[AMD](https://www.amd.com/en/support/download/drivers.html) 或 [Intel](https://www.intel.com/content/www/us/en/download-center/home.html) 驱动后重试 |
 | 手动 GPU ID 被拒绝 | 查看命令输出的设备列表，传入其中的数字 ID，或改用 `--gpu auto` |
 | 图片损坏或格式不受支持 | 重新导出为有效的 JPG、JPEG、PNG 或 WebP，再运行批次 |

@@ -8,14 +8,19 @@ it is not an original super-resolution algorithm or model.
 
 ![Original input, official Real-ESRGAN upscale, and finished composition-preserving wallpaper](docs/assets/workflow-overview.jpg)
 
-Run the one-time setup from the repository root:
+After extracting or cloning the repository, double-click `install.cmd`. Review the displayed
+upstream source and license notice, then approve the download. No manual Real-ESRGAN executable
+or model installation is required.
+
+The equivalent PowerShell command is:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
-Then drag images or folders onto `scripts\run-wallpaper.cmd` or the desktop shortcut and
-choose scale 2, 3, or 4.
+Then drag images or folders onto `scripts\run-wallpaper.cmd` or the desktop shortcut and choose
+scale 2, 3, or 4. If local components are later removed or incomplete, the launcher starts the
+same verified setup automatically and resumes after repair.
 
 The overview uses a deterministic original fixture through input, official upstream inference,
 and wallpaper composition. The fixture and its derived repository images are redistributable;
@@ -39,7 +44,9 @@ the Windows wallpaper workflow around that inference.
 ## Requirements
 
 - 64-bit Windows 10 or 11 and PowerShell 5.1 or newer.
-- Python 3.10 or newer.
+- Windows Package Manager (`winget`) for the easiest first run. If Python is missing, the
+  installer offers to install official Python 3.12 for the current user after confirmation.
+- Alternatively, an existing 64-bit Python 3.10 or newer.
 - A Vulkan-capable GPU with a current NVIDIA, AMD, or Intel driver.
 - Enough free disk space for the official runtime, models, and generated images.
 
@@ -48,25 +55,29 @@ redrawing.
 
 ## Setup
 
-Clone the repository, enter it, and run the setup command shown above. The installer:
+Double-click `install.cmd`, or run the equivalent PowerShell command shown above. The installer:
 
-1. shows the upstream source and license notice;
-2. creates a project-local `.venv` and installs `requirements.txt`;
-3. downloads the pinned official Real-ESRGAN Windows release into ignored `tools/`;
-4. verifies the asset size and SHA-256 before extraction;
-5. installs a Codex skill junction and creates a drag/drop desktop shortcut; and
-6. runs the command-line help smoke test.
+1. shows the upstream source and license notice before downloading it;
+2. finds Python or, with confirmation, installs official Python 3.12 per-user through `winget`;
+3. creates a project-local `.venv` and installs `requirements.txt`;
+4. downloads the pinned official Real-ESRGAN Windows release into ignored `tools/`;
+5. verifies the archive size and SHA-256, then checks the executable and every pinned 2x/3x/4x
+   model file before atomically installing them;
+6. installs a Codex skill junction and creates a drag/drop desktop shortcut; and
+7. runs the command-line help smoke test.
 
-The executable and model files are downloaded from the official upstream release and are
-never committed to this repository. For unattended setup, read
-[Third-Party Notices](THIRD_PARTY_NOTICES.md) first, then pass `-AcceptUpstreamLicense`.
+The executable and all required model files are downloaded automatically from the official
+upstream release and are never committed to this repository. Ordinary users should not download
+or move model files themselves. For unattended setup, read
+[Third-Party Notices](THIRD_PARTY_NOTICES.md) first, then pass `-AcceptUpstreamLicense`; add
+`-InstallPython` only when per-user Python installation is also authorized.
 Interrupted downloads remain bounded under `tools\.downloads` and can resume when setup is
 run again.
 
-### Use an existing official runtime
+### Advanced recovery: use an existing official runtime
 
-Advanced users may download the official Windows archive themselves and point the wrapper at
-the extracted directory:
+This is not part of normal installation. Advanced users who already maintain an official
+runtime may point the wrapper at its extracted directory:
 
 ```powershell
 .\.venv\Scripts\python.exe .\scripts\upscale_wallpaper.py `
@@ -107,7 +118,7 @@ at its top level unless `--recursive` is present. Duplicate paths are processed 
 | `--model MODEL` | Override the scale-aware upstream model selection |
 | `--mode {preserve,cover}` | `preserve` by default; `cover` crops to fill the target |
 | `--out-dir PATH` | Put all batch results under one chosen directory |
-| `--tool-dir PATH` | Use a manually installed official executable and model directory |
+| `--tool-dir PATH` | Advanced override: use an existing official runtime directory |
 | `--copy-desktop` | Also copy each finished wallpaper to the current user's Desktop |
 | `--compare-full-input` | Compare the complete input instead of the default detail crop |
 | `--x-bias 0..1` / `--y-bias 0..1` | Position the optional `cover` crop; default `0.5` |
@@ -142,9 +153,9 @@ line per item. A bad image does not stop the remaining batch; partial failure re
 
 | Symptom | Repair |
 | --- | --- |
-| Python is not found or is older than 3.10 | Install 64-bit Python from [python.org](https://www.python.org/downloads/windows/), enable **Add python.exe to PATH**, open a new PowerShell window, and rerun `setup.ps1` |
-| Download stops or the network fails | Check access to GitHub Releases and rerun `setup.ps1`; the verified partial download is retained for a bounded resume attempt |
-| Executable or model files are missing | Rerun `setup.ps1`, or pass the extracted official directory with `--tool-dir` |
+| Python is not found or is older than 3.10 | Double-click `install.cmd` and approve the offered per-user Python installation. If `winget` is unavailable, install 64-bit Python from [python.org](https://www.python.org/downloads/windows/), enable **Add python.exe to PATH**, then rerun `install.cmd` |
+| Download stops or the network fails | Check access to GitHub Releases and rerun `install.cmd`; the verified partial download is retained for a bounded resume attempt |
+| Executable or model files are missing | Launch the shortcut or rerun `install.cmd`; setup automatically restores the pinned official executable and models |
 | No Vulkan GPU is reported / Vulkan initialization fails | Install the latest driver from [NVIDIA](https://www.nvidia.com/Download/index.aspx), [AMD](https://www.amd.com/en/support/download/drivers.html), or [Intel](https://www.intel.com/content/www/us/en/download-center/home.html), then retry |
 | A selected GPU ID is rejected | Read the detected GPU list printed by the command and pass one of those numeric IDs, or use `--gpu auto` |
 | An image is damaged or unsupported | Re-export it as a valid JPG, JPEG, PNG, or WebP and rerun the batch |

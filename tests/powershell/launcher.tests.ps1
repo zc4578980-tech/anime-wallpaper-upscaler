@@ -27,6 +27,21 @@ function Assert-SequenceEqual {
     Write-Host "PASS: $Message"
 }
 
+function Assert-True {
+    param(
+        [Parameter(Mandatory = $true)]
+        [bool]$Condition,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Message
+    )
+
+    if (-not $Condition) {
+        throw "FAIL: $Message"
+    }
+    Write-Host "PASS: $Message"
+}
+
 try {
     $paths = @(
         "D:\Wallpapers\first image.png",
@@ -53,6 +68,50 @@ try {
         ) `
         -Actual $quietArguments `
         -Message "no-open-output is emitted only when requested"
+
+    $testRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("aups-launcher-tests-" + [guid]::NewGuid().ToString("N"))
+    New-Item -ItemType Directory -Path $testRoot | Out-Null
+    try {
+        $manifestDirectory = Join-Path $testRoot "upstream"
+        New-Item -ItemType Directory -Path $manifestDirectory | Out-Null
+        $manifest = [ordered]@{
+            installDirectory = "runtime"
+            requiredFiles = @(
+                "realesrgan-ncnn-vulkan.exe",
+                "models/realesr-animevideov3-x3.param",
+                "models/realesr-animevideov3-x3.bin"
+            )
+        }
+        $manifest | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $manifestDirectory "realesrgan-windows.json")
+
+        Assert-True (-not (Test-InstallationReady -ProjectRoot $testRoot)) "missing local Python and runtime require one-click setup"
+
+        $script:setupCalls = 0
+        $setupInvoker = {
+            param([string]$ProjectRoot)
+            $script:setupCalls++
+            $venvPython = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
+            New-Item -ItemType Directory -Path (Split-Path -Parent $venvPython) -Force | Out-Null
+            Set-Content -LiteralPath $venvPython -Value "fixture"
+            foreach ($relativePath in $manifest.requiredFiles) {
+                $requiredPath = Join-Path (Join-Path $ProjectRoot "tools\runtime") $relativePath
+                New-Item -ItemType Directory -Path (Split-Path -Parent $requiredPath) -Force | Out-Null
+                Set-Content -LiteralPath $requiredPath -Value "fixture"
+            }
+            return 0
+        }
+        Ensure-InstallationReady -ProjectRoot $testRoot -SetupInvoker $setupInvoker
+        Assert-True ($script:setupCalls -eq 1) "incomplete installation invokes setup exactly once"
+        Assert-True (Test-InstallationReady -ProjectRoot $testRoot) "launcher revalidates Python, executable, and all models after setup"
+
+        Remove-Item -LiteralPath (Join-Path $testRoot "tools\runtime\models\realesr-animevideov3-x3.bin") -Force
+        Assert-True (-not (Test-InstallationReady -ProjectRoot $testRoot)) "missing model is detected before processing"
+    }
+    finally {
+        if (Test-Path -LiteralPath $testRoot) {
+            Remove-Item -LiteralPath $testRoot -Recurse -Force
+        }
+    }
 }
 finally {
     Remove-Item Env:AUPS_TESTING -ErrorAction SilentlyContinue

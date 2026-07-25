@@ -44,5 +44,5 @@ the checked-in validator.
 The checked-in comparison, workflow overview, and social preview now derive from the original
 MIT-licensed `demo-source-original.png` and a real local official Real-ESRGAN 4x run on GPU 0.
 This removes the earlier third-party-artwork promotion risk. The 60-90 second controlled-window
-recording remains blocked because a verified FFmpeg package could not be acquired within the
-five-minute stop-loss; no simulated terminal recording was substituted.
+recording is optional follow-up owned by the user and is not part of the checked-in release gate.
+No simulated terminal recording was substituted.

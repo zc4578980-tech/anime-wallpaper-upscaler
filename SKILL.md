@@ -16,7 +16,7 @@ explicitly asks for a redraw or accepts altering the original art style and deta
 
 ## Setup
 
-From the repository root, run the one-time Windows setup:
+For ordinary Windows users, double-click `install.cmd`. The equivalent PowerShell command is:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
@@ -25,7 +25,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 The setup creates a project-local `.venv`, downloads and verifies the pinned official
 Real-ESRGAN NCNN/Vulkan Windows release under `tools/`, registers this repository as a Codex
 skill junction, and creates an optional desktop shortcut. The upstream executable and models
-are downloaded from their official release and are not committed to this repository.
+are downloaded automatically from their official release and are not committed to this
+repository. Do not ask ordinary users to install or move upstream model files themselves.
 
 This project is a workflow integration around Real-ESRGAN, `realesrgan-ncnn-vulkan`, and ncnn.
 It does not provide an original super-resolution algorithm or model. Preserve the upstream
@@ -83,8 +84,9 @@ Important options:
 ## Tool Expectations
 
 The script expects the verified official Real-ESRGAN NCNN/Vulkan runtime installed by
-`setup.ps1`. An advanced user may instead pass its directory with `--tool-dir` or set
-`REALESRGAN_TOOL_DIR`.
+`install.cmd`/`setup.ps1`. The drag/drop launcher automatically starts setup if Python, the
+executable, or any pinned model is missing. An advanced user may instead pass an existing
+runtime directory with `--tool-dir` or set `REALESRGAN_TOOL_DIR`.
 
 Required files:
 
@@ -92,7 +94,8 @@ Required files:
 - `models\realesrgan-x4plus-anime.param`
 - `models\realesrgan-x4plus-anime.bin`
 
-If these files are missing, run `.\setup.ps1` again. Do not silently fall back to ordinary
+If these files are missing, rerun `install.cmd`; the installer restores them automatically.
+Do not tell ordinary users to download models manually, do not silently fall back to ordinary
 resizing, and do not commit downloaded binaries or model files to the repository.
 
 ## Quality Notes
