@@ -220,6 +220,7 @@ def test_batch_writes_one_scoped_log_per_distinct_output_root(
     assert str(jobs[2].source) not in first_log
     assert "Succeeded: 0" in second_log
     assert "Failed: 1" in second_log
+    assert "ValueError" in second_log
     assert "unsupported pixels" in second_log
 
 

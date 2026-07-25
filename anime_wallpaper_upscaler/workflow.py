@@ -175,7 +175,7 @@ def process_image(
 def _write_batch_logs(
     jobs: Sequence[InputJob],
     successes: Sequence[tuple[InputJob, ImageResult]],
-    failures: Sequence[tuple[InputJob, str]],
+    failures: Sequence[tuple[InputJob, str, str]],
 ) -> tuple[Path, ...]:
     roots = tuple(dict.fromkeys(job.output_root for job in jobs))
     log_paths: list[Path] = []
@@ -195,7 +195,8 @@ def _write_batch_logs(
             )
             lines.append(f"SUCCESS {job.source}{destination}")
         lines.extend(
-            f"FAILED {job.source}: {message}" for job, message in scoped_failures
+            f"FAILED {job.source} [{error_type}]: {message}"
+            for job, error_type, message in scoped_failures
         )
         log_path = root / LOG_NAME
         log_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -210,7 +211,7 @@ def process_batch(
     progress: Callable[[int, int, InputJob], None] | None = None,
 ) -> BatchSummary:
     successes: list[tuple[InputJob, ImageResult]] = []
-    failures: list[tuple[InputJob, str]] = []
+    failures: list[tuple[InputJob, str, str]] = []
     total = len(jobs)
 
     for current, job in enumerate(jobs, start=1):
@@ -220,13 +221,13 @@ def process_batch(
             result = processor(job, options)
         except Exception as exc:
             message = str(exc).strip() or type(exc).__name__
-            failures.append((job, message))
+            failures.append((job, type(exc).__name__, message))
         else:
             successes.append((job, result))
 
     log_paths = _write_batch_logs(jobs, successes, failures)
     return BatchSummary(
         results=tuple(result for _, result in successes),
-        failures=tuple((job.source, message) for job, message in failures),
+        failures=tuple((job.source, message) for job, _, message in failures),
         log_paths=log_paths,
     )
