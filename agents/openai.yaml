@@ -1,3 +1,3 @@
 display_name: Anime Wallpaper Upscaler
-short_description: Build Windows wallpapers with the official Real-ESRGAN runtime.
-default_prompt: Use the local official Real-ESRGAN workflow to upscale these images into Windows wallpapers while preserving the full composition.
+short_description: Turn images into screen-ready Windows wallpapers with official Real-ESRGAN, drag/drop setup, and composition preservation.
+default_prompt: Use the local official Real-ESRGAN workflow to upscale these images into screen-ready Windows wallpapers, preserve the full composition, and detect my screen and Vulkan GPU automatically.
