@@ -1,5 +1,9 @@
 {
-  "conversionRate": 0.03,
-  "minimumStars": 30,
-  "sources": []
+  "goal": {
+    "minimumNetStars": 30,
+    "windowDays": 30
+  },
+  "release": {
+    "status": "planned"
+  }
 }

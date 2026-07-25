@@ -1,6 +1,7 @@
-day,date,stars,unique_visitors,views,top_referrer,notes
-1,,,,,,
-3,,,,,,
-7,,,,,,
-14,,,,,,
-30,,,,,,
+day,date,stars,net_new_stars,unique_visitors,views,top_referrer,evidence,notes
+0,,,,,,,,Record the release-day baseline before publishing v0.2.0.
+1,,,,,,,,
+3,,,,,,,,
+7,,,,,,,,
+14,,,,,,,,
+30,,,,,,,,Evaluate the 30-net-new-Star target.

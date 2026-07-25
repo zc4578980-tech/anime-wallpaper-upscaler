@@ -7,14 +7,15 @@ Real-ESRGAN NCNN/Vulkan runtime.
 
 Acceptance criteria for v0.2.0: verified one-command setup, drag/drop and folder input, automatic
 display/GPU detection, 2x/3x/4x controls, actionable repairs, no tracked upstream binaries, and
-a real RTX 5070 Ti end-to-end run. Formal release also requires the conservative 30-Star launch
-gate to pass from confirmed evidence.
+a real RTX 5070 Ti end-to-end run. The public outcome target is at least 30 net new GitHub Stars
+in the first 30 calendar days after a separately authorized v0.2.0 release.
 
 ## Current State
 
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
   acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete;
-  formal release remains blocked by launch evidence and separate authorization.
+  formal release awaits PR review and separate authorization, while the first-month Star goal is
+  ready for release-day measurement.
 - Version: v0.2.0 release candidate on `codex/v0.2.0-integration`, pushed as Draft PR #1;
   no tag or GitHub Release created.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
@@ -34,7 +35,7 @@ gate to pass from confirmed evidence.
 - Owned demo verification: `D:\CodexWorkspace\outputs\anime-wallpaper-upscaler-v0.2.0-demo-owned\owned-demo-verification.json`
 - One-click smoke output: `D:\CodexWorkspace\outputs\anime-wallpaper-upscaler-v0.2.0-one-click-smoke`
 - One-click verification: `D:\CodexWorkspace\outputs\anime-wallpaper-upscaler-v0.2.0-one-click-smoke\one-click-verification.json`
-- Launch gate: `scripts\validate_launch_readiness.py docs\release\launch-plan.json`
+- Star-goal tracker: `scripts\validate_launch_readiness.py docs\release\launch-plan.json`
 
 ## Decisions
 
@@ -64,7 +65,9 @@ gate to pass from confirmed evidence.
 - The checked-in demo source is generated deterministically by `scripts\build_original_demo.py`
   and is an original MIT-licensed technical scene. Comparison, overview, and social-preview
   assets now derive from that source and a real official Real-ESRGAN 4x run.
-- A 30-Star first-month target is a release-readiness forecast gate, not an engineering guarantee.
+- A 30-Star first-month target is a post-release outcome metric, not a forecast or engineering
+  guarantee. Record an auditable public Star baseline immediately before release and assess net
+  new Stars at the 30-day checkpoint.
 - A recorded demo is optional and user-owned follow-up work, not a v0.2.0 release gate.
 
 ## Commands And Validation
@@ -130,22 +133,29 @@ and README/install instructions are present, but the repository homepage and Top
 the custom social-preview endpoint is unconfigured, and no GitHub Release exists. These are
 public-positioning follow-ups, not authorization to publish a v0.2.0 Release.
 
+On 2026-07-25, the former release-blocking visit forecast was replaced by the user's actual
+requirement: at least 30 net new GitHub Stars in the first 30 calendar days after release. The
+tracker validates the target and release-day baseline schema before release, reports progress
+before day 30, and assesses the measured public Star count on or after day 30. It does not claim
+or guarantee organic Stars, and it no longer requires invented pre-launch traffic.
+
 ## Blockers And Risks
 
-- Formal release gate is blocked at 0 confirmed visits, 0 independent channels, and 0 forecast
-  Stars. Candidate channels are unconfirmed and deliberately count as zero.
+- The first-month Star goal has no baseline until release day. It cannot be evaluated or presented
+  as evidence until an authorized release records public baseline data.
 - Real-ESRGAN executable and model files remain external, ignored dependencies.
 - GitHub homepage, Topics, and custom social preview require separate public-positioning
-  decisions. Do not tag, announce, or create a Release without the launch gate and authorization.
+  decisions. Do not tag, announce, or create a Release without separate authorization.
 
 ## Next Session
 
 1. Read this file, `docs\release\launch-forecast.md`, and the verification summary; inspect the
    integration branch, merge commit `e3eb1e2`, and Draft PR #1.
-2. Secure actual, policy-compliant placements and add only attributable evidence to
-   `docs\release\launch-plan.json`; rerun the gate.
-3. Keep the repository public but do not tag, announce, or create v0.2.0 Release until the gate
-   passes and the user separately authorizes release actions.
+2. When a release is separately authorized, record its public Star baseline and evidence in
+   `docs\release\launch-plan.json`, then collect the day 1/3/7/14/30 checkpoints in
+   `docs\release\measurement.csv`.
+3. Keep the repository public but do not tag, announce, or create a v0.2.0 Release until the
+   user separately authorizes release actions.
 4. The user will handle any optional recording; do not make it an engineering release blocker.
 5. Do not add a complex GUI merely to chase Stars; keep further work focused on setup friction,
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
