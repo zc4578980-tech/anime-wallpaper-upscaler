@@ -147,6 +147,15 @@ check, CLI help, and both PowerShell harnesses without downloading models or req
 After upgrading the Actions integrations to v7, both the push and pull-request runs for commit
 `1f0a714` passed without the Node 20 deprecation annotation.
 
+On 2026-07-25, launcher scale handling was hardened in commit `41e2c71`: surrounding whitespace
+is trimmed before validating 2x/3x/4x input, while blank input still defaults to 4x and invalid
+input retains the existing repair message and exit code. Regression passed: 75 Python tests, 27
+setup assertions, 9 launcher assertions, compile, CLI help, and whitespace checks. The cleanroom
+clone at `D:\CodexWorkspace\scratch\anime-wallpaper-upscaler-v0.2.0-cleanroom-20260725` then
+processed the original demo through the real launcher when `cmd.exe` supplied `2 `, using the RTX
+5070 Ti at 2560x1600 and producing the expected wallpaper, comparison, and log. PR #1's Windows
+verification run `30165034891` passed; the PR remains Draft and no Release activity occurred.
+
 ## Blockers And Risks
 
 - The first-month Star goal has no baseline until release day. It cannot be evaluated or presented
