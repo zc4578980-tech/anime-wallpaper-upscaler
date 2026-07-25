@@ -26,3 +26,15 @@ python scripts/validate_launch_readiness.py docs/release/launch-plan.json
 
 The checked-in plan is intentionally empty and blocking. Change this status only after real
 evidence has been added to `launch-plan.json` and the exact command above exits successfully.
+
+## Evidence Audit: 2026-07-25
+
+The bounded public-evidence audit found no confirmed placement or attributable GitHub traffic
+for this project. Counted qualified visits are `0`, counted independent channels are `0`, and
+the pessimistic forecast is therefore `0 Stars`. Candidate venues are documented in
+`docs/release/evidence/README.md`, but every unconfirmed candidate receives a 100% haircut and
+remains excluded from `launch-plan.json`.
+
+This blocks a formal v0.2.0 Release even though the technical acceptance suite passes. Do not
+tag, push, announce, or change this status until real placement and referrer evidence satisfies
+the checked-in validator.

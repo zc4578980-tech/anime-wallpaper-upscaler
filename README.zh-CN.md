@@ -6,7 +6,7 @@
 
 [English](README.md)
 
-![使用同一选定区域的 Real-ESRGAN 对比图](docs/assets/demo-comparison.jpg)
+![输入区域、官方 Real-ESRGAN 超分与保留完整构图的成品壁纸](docs/assets/workflow-overview.jpg)
 
 在仓库根目录运行一次安装命令：
 
@@ -16,8 +16,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 
 然后把图片或文件夹拖到 `scripts\run-wallpaper.cmd` 或桌面快捷方式上，并选择 2、3、4 倍率。
 
-上方图片的左右两侧使用同一个竖向细节区域，仅保留作技术演示；其独立权利状态和删除联系
-方式见[演示素材声明](docs/assets/NOTICE.md)。
+上方概览把同一个保留竖向区域依次用于输入、官方上游推理和壁纸构图，仅作技术演示；其独立
+权利状态和删除联系方式见[演示素材声明](docs/assets/NOTICE.md)。
 
 ## 本项目与官方 Real-ESRGAN 的区别
 

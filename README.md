@@ -6,7 +6,7 @@ it is not an original super-resolution algorithm or model.
 
 [简体中文](README.zh-CN.md)
 
-![Real-ESRGAN comparison using the same selected crop](docs/assets/demo-comparison.jpg)
+![Input crop, official Real-ESRGAN upscale, and finished composition-preserving wallpaper](docs/assets/workflow-overview.jpg)
 
 Run the one-time setup from the repository root:
 
@@ -17,9 +17,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 Then drag images or folders onto `scripts\run-wallpaper.cmd` or the desktop shortcut and
 choose scale 2, 3, or 4.
 
-The comparison above uses the same portrait crop on both sides. It is retained only as a
-technical demonstration; see [Asset Notice](docs/assets/NOTICE.md) for its separate rights
-status and removal contact.
+The overview uses the same retained portrait selection through input, official upstream
+inference, and wallpaper composition. It is included only as a technical demonstration; see
+[Asset Notice](docs/assets/NOTICE.md) for its separate rights status and removal contact.
 
 ## How This Differs from Official Real-ESRGAN
 

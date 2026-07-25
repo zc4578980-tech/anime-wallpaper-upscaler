@@ -19,9 +19,20 @@ ACCENT = "#5ec2a5"
 
 
 def _font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    candidates = (
+        "segoeui.ttf",
+        Path(r"C:\Windows\Fonts\segoeui.ttf"),
+        "DejaVuSans.ttf",
+        "LiberationSans-Regular.ttf",
+    )
+    for candidate in candidates:
+        try:
+            return ImageFont.truetype(candidate, size=size)
+        except OSError:
+            continue
     try:
-        return ImageFont.truetype("DejaVuSans.ttf", size=size)
-    except OSError:
+        return ImageFont.load_default(size=size)
+    except TypeError:
         return ImageFont.load_default()
 
 
