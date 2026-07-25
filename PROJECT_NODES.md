@@ -14,8 +14,9 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
 
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
   acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete;
-  formal release awaits PR review and separate authorization, while the first-month Star goal is
-  ready for release-day measurement.
+  a Windows GitHub Actions verification workflow is green for the Draft PR; formal release
+  awaits PR review and separate authorization, while the first-month Star goal is ready for
+  release-day measurement.
 - Version: v0.2.0 release candidate on `codex/v0.2.0-integration`, pushed as Draft PR #1;
   no tag or GitHub Release created.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
@@ -36,6 +37,7 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
 - One-click smoke output: `D:\CodexWorkspace\outputs\anime-wallpaper-upscaler-v0.2.0-one-click-smoke`
 - One-click verification: `D:\CodexWorkspace\outputs\anime-wallpaper-upscaler-v0.2.0-one-click-smoke\one-click-verification.json`
 - Star-goal tracker: `scripts\validate_launch_readiness.py docs\release\launch-plan.json`
+- CI workflow: `.github\workflows\ci.yml`
 
 ## Decisions
 
@@ -138,6 +140,12 @@ requirement: at least 30 net new GitHub Stars in the first 30 calendar days afte
 tracker validates the target and release-day baseline schema before release, reports progress
 before day 30, and assesses the measured public Star count on or after day 30. It does not claim
 or guarantee organic Stars, and it no longer requires invented pre-launch traffic.
+
+On 2026-07-25, `.github/workflows/ci.yml` added a Windows GitHub Actions `Verify` workflow for
+the release candidate. It installs constrained dependencies and runs the Python suite, compile
+check, CLI help, and both PowerShell harnesses without downloading models or requiring a GPU.
+After upgrading the Actions integrations to v7, both the push and pull-request runs for commit
+`1f0a714` passed without the Node 20 deprecation annotation.
 
 ## Blockers And Risks
 
