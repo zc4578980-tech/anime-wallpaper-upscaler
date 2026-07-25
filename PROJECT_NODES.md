@@ -15,8 +15,8 @@ gate to pass from confirmed evidence.
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
   acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete;
   formal release remains blocked by launch evidence and separate authorization.
-- Version: v0.2.0 release candidate on `codex/v0.2.0-integration`; no tag, push, or GitHub
-  Release created.
+- Version: v0.2.0 release candidate on `codex/v0.2.0-integration`, pushed as Draft PR #1;
+  no tag or GitHub Release created.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
 
@@ -123,22 +123,29 @@ Python tests, 27 setup assertions, 6 launcher assertions, compile/help, whitespa
 no tracked upstream binaries. The demo fixture test now checks deterministic same-environment
 generation plus the checked-in asset's rendered integrity rather than cross-Pillow byte identity.
 
+On 2026-07-25, the integration branch was pushed and Draft PR #1 was created against `main`:
+`https://github.com/zc4578980-tech/anime-wallpaper-upscaler/pull/1`. Its remote head matches
+local commit `71af90f` and GitHub reports a clean merge state. The GitHub repository description
+and README/install instructions are present, but the repository homepage and Topics are empty,
+the custom social-preview endpoint is unconfigured, and no GitHub Release exists. These are
+public-positioning follow-ups, not authorization to publish a v0.2.0 Release.
+
 ## Blockers And Risks
 
 - Formal release gate is blocked at 0 confirmed visits, 0 independent channels, and 0 forecast
   Stars. Candidate channels are unconfirmed and deliberately count as zero.
 - Real-ESRGAN executable and model files remain external, ignored dependencies.
-- `codex/v0.2.0-integration` has no remote branch. Do not push or rewrite history without a
-  separate authorization.
+- GitHub homepage, Topics, and custom social preview require separate public-positioning
+  decisions. Do not tag, announce, or create a Release without the launch gate and authorization.
 
 ## Next Session
 
 1. Read this file, `docs\release\launch-forecast.md`, and the verification summary; inspect the
-   integration branch and merge commit `e3eb1e2`.
+   integration branch, merge commit `e3eb1e2`, and Draft PR #1.
 2. Secure actual, policy-compliant placements and add only attributable evidence to
    `docs\release\launch-plan.json`; rerun the gate.
-3. Keep the repository public but do not tag, push, announce, or create v0.2.0 Release until the
-   gate passes and the user separately authorizes release actions.
+3. Keep the repository public but do not tag, announce, or create v0.2.0 Release until the gate
+   passes and the user separately authorizes release actions.
 4. The user will handle any optional recording; do not make it an engineering release blocker.
 5. Do not add a complex GUI merely to chase Stars; keep further work focused on setup friction,
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
