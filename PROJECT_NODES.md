@@ -13,9 +13,10 @@ gate to pass from confirmed evidence.
 ## Current State
 
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
-  acceptance, and rights-safe demo visuals complete; formal release blocked by launch evidence
-  and separate authorization.
-- Version: v0.2.0 release candidate on `codex/v0.2.0`; no tag, push, or GitHub Release created.
+  acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete;
+  formal release remains blocked by launch evidence and separate authorization.
+- Version: v0.2.0 release candidate on `codex/v0.2.0-integration`; no tag, push, or GitHub
+  Release created.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
 
@@ -112,17 +113,28 @@ path, a correct Codex skill junction, no tracked upstream binaries/models, and a
 1280x640 social preview. Inference code was unchanged, so the recorded RTX 5070 Ti acceptance and
 one-click smoke remain applicable.
 
+On 2026-07-25, `origin/main` was fetched and its 11 commits were integrated into
+`codex/v0.2.0-integration` by merge commit `e3eb1e2`. All five conflicts retained the candidate
+content because its tested modular implementation already included the remote full-input and
+preserved-aspect comparison behavior, while its demo asset is original MIT content and the
+remote replacement is explicitly third-party artwork. The integration tree therefore matches the
+candidate tree and retains `origin/main` as a merge parent. Full regression then passed: 89
+Python tests, 27 setup assertions, 6 launcher assertions, compile/help, whitespace checks, and
+no tracked upstream binaries. The demo fixture test now checks deterministic same-environment
+generation plus the checked-in asset's rendered integrity rather than cross-Pillow byte identity.
+
 ## Blockers And Risks
 
 - Formal release gate is blocked at 0 confirmed visits, 0 independent channels, and 0 forecast
   Stars. Candidate channels are unconfirmed and deliberately count as zero.
 - Real-ESRGAN executable and model files remain external, ignored dependencies.
-- The branch and `origin/main` have divergent histories; do not push or rewrite history without
-  a separate review and authorization.
+- `codex/v0.2.0-integration` has no remote branch. Do not push or rewrite history without a
+  separate authorization.
 
 ## Next Session
 
-1. Read this file, `docs\release\launch-forecast.md`, and the verification summary; inspect Git.
+1. Read this file, `docs\release\launch-forecast.md`, and the verification summary; inspect the
+   integration branch and merge commit `e3eb1e2`.
 2. Secure actual, policy-compliant placements and add only attributable evidence to
    `docs\release\launch-plan.json`; rerun the gate.
 3. Keep the repository public but do not tag, push, announce, or create v0.2.0 Release until the
