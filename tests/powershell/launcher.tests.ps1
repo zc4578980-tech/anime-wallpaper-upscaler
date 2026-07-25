@@ -69,6 +69,16 @@ try {
         -Actual $quietArguments `
         -Message "no-open-output is emitted only when requested"
 
+    Assert-True ( (Resolve-ScaleAnswer -Answer " 2 ") -eq 2 ) "scale input ignores surrounding whitespace"
+    Assert-True ( (Resolve-ScaleAnswer -Answer " ") -eq 4 ) "blank scale input defaults to 4"
+    try {
+        $null = Resolve-ScaleAnswer -Answer "5"
+        throw "FAIL: invalid scale input must fail"
+    }
+    catch [System.Management.Automation.RuntimeException] {
+        Assert-True ($_.Exception.Message -eq "Scale must be 2, 3, or 4.") "invalid scale input reports the existing repair message"
+    }
+
     $testRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("aups-launcher-tests-" + [guid]::NewGuid().ToString("N"))
     New-Item -ItemType Directory -Path $testRoot | Out-Null
     try {

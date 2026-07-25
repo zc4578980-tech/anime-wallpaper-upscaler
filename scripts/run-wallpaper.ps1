@@ -34,6 +34,23 @@ function ConvertTo-CliArguments {
     return $arguments
 }
 
+function Resolve-ScaleAnswer {
+    [CmdletBinding()]
+    param(
+        [AllowNull()]
+        [string]$Answer
+    )
+
+    $normalized = if ($null -eq $Answer) { "" } else { $Answer.Trim() }
+    if ([string]::IsNullOrWhiteSpace($normalized)) {
+        return 4
+    }
+    if ($normalized -match "^[234]$") {
+        return [int]$normalized
+    }
+    throw "Scale must be 2, 3, or 4."
+}
+
 function Test-InstallationReady {
     [CmdletBinding()]
     param(
@@ -136,14 +153,11 @@ if ($env:AUPS_TESTING -ne "1") {
     }
 
     $scaleAnswer = Read-Host "Scale [2/3/4] (default 4)"
-    if ([string]::IsNullOrWhiteSpace($scaleAnswer)) {
-        $scale = 4
+    try {
+        $scale = Resolve-ScaleAnswer -Answer $scaleAnswer
     }
-    elseif ($scaleAnswer -match "^[234]$") {
-        $scale = [int]$scaleAnswer
-    }
-    else {
-        [Console]::Error.WriteLine("Scale must be 2, 3, or 4.")
+    catch {
+        [Console]::Error.WriteLine($_.Exception.Message)
         exit 2
     }
 
