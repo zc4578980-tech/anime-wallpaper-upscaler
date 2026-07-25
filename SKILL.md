@@ -5,7 +5,8 @@ description: Use when the user wants an anime, illustration, game, or wallpaper 
 
 # Anime Wallpaper Upscale
 
-Use this skill to turn low-resolution anime-style images into sharper wallpapers.
+Use this skill to turn one or more low-resolution anime-style images into screen-ready
+wallpapers. Files and whole folders are supported.
 
 Prefer faithful local Real-ESRGAN upscaling over ordinary resizing when the source is small,
 blurred, compressed, or intended for a high-DPI screen.
@@ -13,14 +14,35 @@ blurred, compressed, or intended for a high-DPI screen.
 Do not use Stable Diffusion, img2img, or other generative redraw workflows unless the user
 explicitly asks for a redraw or accepts altering the original art style and details.
 
+## Setup
+
+From the repository root, run the one-time Windows setup:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+The setup creates a project-local `.venv`, downloads and verifies the pinned official
+Real-ESRGAN NCNN/Vulkan Windows release under `tools/`, registers this repository as a Codex
+skill junction, and creates an optional desktop shortcut. The upstream executable and models
+are downloaded from their official release and are not committed to this repository.
+
+This project is a workflow integration around Real-ESRGAN, `realesrgan-ncnn-vulkan`, and ncnn.
+It does not provide an original super-resolution algorithm or model. Preserve the upstream
+credits, source links, notices, and licenses when describing or redistributing the workflow.
+
 ## Workflow
 
-1. Inspect the source image size and screen ratio.
-2. Run `scripts/upscale_wallpaper.py` for deterministic Real-ESRGAN processing.
-3. Generate a 4x PNG upscale, a target-size wallpaper, and a comparison crop.
-4. Preserve the full original composition by default. Use crop mode only when requested.
-5. Save final wallpapers under `outputs/wallpapers` unless the user names another destination.
-6. Copy the recommended wallpaper to the desktop only when the user asks for easy access.
+1. Accept an image, several images, or one or more folders from the user.
+2. Run `scripts/upscale_wallpaper.py` for deterministic official Real-ESRGAN processing.
+3. Let the CLI detect the primary screen resolution and Vulkan GPU unless the user asks for
+   explicit values.
+4. Use scale 4 by default; preserve an explicit scale 2, 3, or 4 selection.
+5. Generate an upscaled PNG, a target-size wallpaper, and a comparison image.
+6. Preserve the full original composition by default. Use crop mode only when requested.
+7. Keep per-input results beside their source under `Wallpaper Upscaler Output`, or use
+   `--out-dir` when the user requests one shared destination.
+8. Copy the recommended wallpaper to the desktop only when the user asks for easy access.
 
 If a redraw attempt looks less faithful than the Real-ESRGAN result, prefer the non-redraw
 version and say so.
@@ -28,31 +50,41 @@ version and say so.
 ## Script
 
 ```powershell
-python .\scripts\upscale_wallpaper.py `
+.\.venv\Scripts\python.exe .\scripts\upscale_wallpaper.py `
   --input "C:\path\to\image.jpg" `
-  --tool-dir "C:\path\to\realesrgan-ncnn-vulkan-v0.2.0-windows" `
-  --target 2560x1600 `
-  --copy-desktop
+  --input "C:\path\to\wallpaper folder" `
+  --scale 4
 ```
 
-The tool directory can also be provided through the `REALESRGAN_TOOL_DIR` environment
-variable. The executable and selected model files must already be present. Do not silently
-fall back to ordinary resizing when the AI tool is unavailable.
+Use `--recursive` when folder subdirectories should also be scanned. The compatible CLI uses
+`--target auto` and `--gpu auto` by default. Manual values such as `--target 2560x1600` and
+`--gpu 0` remain available.
+
+Windows users can also drag files or folders onto `scripts\run-wallpaper.cmd` or the desktop
+shortcut. With no dropped paths, the launcher opens a native multi-file picker and then asks
+once for scale 2, 3, or 4.
 
 Important options:
 
-- `--target 2560x1600`: suitable for a 16:10 laptop screen.
-- `--target 2560x1440`: suitable for a 16:9 monitor.
+- `--input PATH`: accepts a supported image or folder; repeat it for multiple inputs.
+- `--recursive`: includes supported images in subfolders.
+- `--scale 2|3|4`: selects a compatible upstream scale; the default is 4.
+- `--target auto`: detects the physical primary-display resolution; pass `WIDTHxHEIGHT` to
+  override it.
+- `--gpu auto`: lets the official ncnn runtime choose the Vulkan GPU; pass a numeric ID to
+  override it.
 - `--mode preserve`: keeps the full composition and fills extra space with a blurred backdrop.
 - `--mode cover`: crops to fill the target exactly; use only when cropping is accepted.
+- `--out-dir PATH`: puts all batch results under one output directory.
 - `--compare-full-input`: use the whole input image for the comparison without a second crop.
 - `--x-bias` and `--y-bias`: adjust the crop position in cover mode.
-- `--model realesrgan-x4plus-anime`: preferred for anime and illustration images.
+- `--model NAME`: overrides the scale-aware upstream model selection.
 
 ## Tool Expectations
 
-The script expects a local Real-ESRGAN NCNN/Vulkan tool directory. Pass it with `--tool-dir`
-or set `REALESRGAN_TOOL_DIR`.
+The script expects the verified official Real-ESRGAN NCNN/Vulkan runtime installed by
+`setup.ps1`. An advanced user may instead pass its directory with `--tool-dir` or set
+`REALESRGAN_TOOL_DIR`.
 
 Required files:
 
@@ -60,8 +92,8 @@ Required files:
 - `models\realesrgan-x4plus-anime.param`
 - `models\realesrgan-x4plus-anime.bin`
 
-If these files are missing, download or restore the portable executable and model files before
-running the script. Do not commit binaries or model files to the repository.
+If these files are missing, run `.\setup.ps1` again. Do not silently fall back to ordinary
+resizing, and do not commit downloaded binaries or model files to the repository.
 
 ## Quality Notes
 
