@@ -5,8 +5,14 @@ description: Use when the user wants an anime, illustration, game, or wallpaper 
 
 # Anime Wallpaper Upscale
 
-Use this skill to turn one or more low-resolution anime-style images into screen-ready
-wallpapers. Files and whole folders are supported.
+This is the Agent-facing entry point for the Windows wallpaper workflow. Translate a user's
+plain-language request into an explicit local wrapper command, then turn one or more
+low-resolution anime-style images into screen-ready wallpapers. Files and whole folders are
+supported.
+
+The Skill is lightweight orchestration, not an inference engine. The verified official
+Real-ESRGAN NCNN/Vulkan runtime and models are downloaded during first setup and perform the
+actual super-resolution through ncnn and Vulkan.
 
 Prefer faithful local Real-ESRGAN upscaling over ordinary resizing when the source is small,
 blurred, compressed, or intended for a high-DPI screen.
@@ -47,6 +53,26 @@ credits, source links, notices, and licenses when describing or redistributing t
 
 If a redraw attempt looks less faithful than the Real-ESRGAN result, prefer the non-redraw
 version and say so.
+
+## Intent Mapping
+
+Resolve natural-language requests to explicit options before running the wrapper:
+
+| User intent | Wrapper option |
+| --- | --- |
+| No scale stated | `--scale 4` |
+| "2x", "3x", or "4x" | Preserve the requested `--scale` |
+| No screen size stated | `--target auto` |
+| A resolution such as "2560x1440" | `--target 2560x1440` |
+| No GPU stated | `--gpu auto` |
+| A specific Vulkan GPU ID | `--gpu ID` |
+| Keep everything / no crop / preserve composition | `--mode preserve` |
+| Crop to fill / cover the screen | `--mode cover`, only when cropping is explicit |
+| A folder including subfolders | Repeat `--input` as needed and add `--recursive` |
+| One shared destination | `--out-dir PATH` |
+
+Do not infer `cover` merely from "fit my screen" or "make a wallpaper". Those requests keep
+the default `preserve` mode and use the blurred backdrop to fill the target aspect ratio.
 
 ## Script
 

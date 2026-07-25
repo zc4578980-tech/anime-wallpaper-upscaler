@@ -100,7 +100,7 @@ def build_social_preview(overview: Path, output: Path) -> None:
     )
     draw.text(
         (48, 82),
-        "Full composition. Screen ready. Built on Real-ESRGAN.",
+        "Agent-ready Windows wallpapers. Built on Real-ESRGAN.",
         fill=MUTED_TEXT,
         font=_font(22),
     )

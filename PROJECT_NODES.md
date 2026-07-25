@@ -12,8 +12,9 @@ gate to pass from confirmed evidence.
 
 ## Current State
 
-- Status: v0.2.0 implementation, one-click installation, technical acceptance, and rights-safe
-  demo visuals complete; formal release blocked by launch evidence and separate authorization.
+- Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
+  acceptance, and rights-safe demo visuals complete; formal release blocked by launch evidence
+  and separate authorization.
 - Version: v0.2.0 release candidate on `codex/v0.2.0`; no tag, push, or GitHub Release created.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
@@ -46,6 +47,13 @@ gate to pass from confirmed evidence.
 - The project's independent value is composition-preserving wallpaper output, target-screen
   adaptation, comparison generation, batch workflow, and ease of use. The current release
   now packages these into setup, drag/drop, CLI, and Codex skill workflows.
+- Public positioning leads with "Lightweight Windows and Agent Skill built on official
+  Real-ESRGAN." Lightweight describes the repository and orchestration layer only: first setup
+  still downloads the verified official runtime and models, which perform inference through
+  ncnn and Vulkan.
+- Agent requests are mapped to explicit wrapper options. Unspecified screen/GPU values remain
+  `auto`; unspecified composition remains `preserve`; an explicit 2x/3x/4x request is retained;
+  and `cover` is used only when the user accepts cropping.
 - Scale-aware defaults preserve the existing x4plus-anime model at 4x and use
   realesr-animevideov3 at 2x/3x; incompatible manual fixed-4x combinations fail before inference.
 - Ordinary users use `install.cmd` and never install upstream models manually. Setup can install
@@ -95,6 +103,15 @@ The one-click installer milestone then passed 27 setup assertions, 6 launcher as
 automatic scale-2 model and target detection, resolving 2560x1600 and producing a wallpaper,
 comparison, raw upscale, and successful log without `--tool-dir` or `--model`.
 
+The Agent-first discovery milestone updated both READMEs, `SKILL.md`, the Agent-community draft,
+and the reproducible social preview. Natural-language examples now cover images, recursive
+folders, scale, target, GPU, composition, and output destination while showing the exact wrapper
+command and upstream architecture. Validation remained at 89 Python tests, 27 setup assertions,
+6 launcher assertions, clean compile/help/PowerShell parsing, a verified missing-runtime exit-2
+path, a correct Codex skill junction, no tracked upstream binaries/models, and a visually checked
+1280x640 social preview. Inference code was unchanged, so the recorded RTX 5070 Ti acceptance and
+one-click smoke remain applicable.
+
 ## Blockers And Risks
 
 - Formal release gate is blocked at 0 confirmed visits, 0 independent channels, and 0 forecast
@@ -112,7 +129,7 @@ comparison, raw upscale, and successful log without `--tool-dir` or `--model`.
    gate passes and the user separately authorizes release actions.
 4. The user will handle any optional recording; do not make it an engineering release blocker.
 5. Do not add a complex GUI merely to chase Stars; keep further work focused on setup friction,
-   proof quality, bilingual discovery, and confirmed channels.
+   proof quality, bilingual discovery, Agent invocation, and confirmed channels.
 
 ## Update Rule
 

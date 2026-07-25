@@ -6,11 +6,15 @@ assume placement, recommendation traffic, or a particular number of Stars.
 
 ## GitHub / Agent-Skill Audience
 
-I built a small Windows workflow skill around the official Real-ESRGAN NCNN/Vulkan release.
-It accepts repeated images or folders, detects the physical primary screen, keeps the full
-composition with blurred fill by default, and writes comparisons plus batch logs. The setup
-creates a local `.venv`, verifies the pinned upstream archive, and registers the repository as
-a Codex skill junction.
+I built a lightweight Windows and Agent Skill around the official Real-ESRGAN NCNN/Vulkan
+release. After one setup, I can ask an Agent to "upscale this folder 3x, fit my current screen,
+and keep every image uncropped." The Skill maps that request to explicit local wrapper options,
+detects the physical primary screen and Vulkan GPU, and writes wallpapers, comparisons, and
+batch logs.
+
+The repository stays lightweight: setup creates a local `.venv`, verifies the pinned official
+archive, downloads its required models, and registers the repository as a Codex skill junction.
+Users do not install upstream models manually.
 
 The inference executable and models are upstream work and are downloaded during setup; they
 are not committed here, and this project does not claim an original model or algorithm.

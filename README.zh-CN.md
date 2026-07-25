@@ -1,8 +1,11 @@
 # Anime Wallpaper Upscaler
 
-**基于官方 Real-ESRGAN 的 Windows 壁纸工作流（Windows wallpaper workflow built on official Real-ESRGAN）。**
-本项目把上游 `realesrgan-ncnn-vulkan`/ncnn 推理程序封装成本地、默认保留完整构图的工作流；
-不包含也不宣称原创超分算法或模型。
+**基于官方 Real-ESRGAN 的轻量 Windows 工具与 Agent Skill。** 你可以直接用自然语言告诉 Agent，
+也可以拖放图片或使用命令行；工作流默认保留完整原图构图，并生成适配屏幕的壁纸。
+
+轻量指 Skill 和仓库封装本身；首次配置仍会自动下载并校验固定版本的官方
+`realesrgan-ncnn-vulkan` 运行时与模型。真正执行推理的是 Real-ESRGAN 和 ncnn；本项目不是原创
+超分算法或模型。
 
 [English](README.md)
 
@@ -23,6 +26,40 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 上方概览把一张可重复生成的原创技术图依次用于输入、官方上游推理和壁纸构图。该源图及仓库
 内的衍生演示图允许再分发，来源说明见[演示素材声明](docs/assets/NOTICE.md)。
 
+## Agent Skill
+
+完成安装后，Agent 可以把自然语言需求转换成与命令行完全相同、可复现的本地封装命令。例如：
+
+- “把 `C:\Pictures\wallpaper.png` 放大 3 倍，适配当前屏幕，并保留完整构图。”
+- “批量处理 `C:\Pictures\Anime` 及其所有子文件夹中的壁纸，使用 2 倍。”
+- “使用 Vulkan GPU 0，把所有 4 倍结果放到 `D:\Wallpaper Output`。”
+- 只有明确接受损失边缘内容时，才说“裁切并铺满屏幕”。
+
+安装器会把本仓库注册为：
+
+```text
+%USERPROFILE%\.codex\skills\anime-wallpaper-upscale -> 仓库根目录
+```
+
+Agent 会把需求落实为明确参数，再调用封装脚本。例如：
+
+```powershell
+.\.venv\Scripts\python.exe .\scripts\upscale_wallpaper.py `
+  --input "C:\Pictures\wallpaper.png" `
+  --scale 3 `
+  --target auto `
+  --gpu auto `
+  --mode preserve
+```
+
+Agent 不会替代或重新实现推理：
+
+```text
+用户意图 -> Agent Skill -> 壁纸封装脚本
+         -> 官方 realesrgan-ncnn-vulkan.exe
+         -> 官方模型 / ncnn / Vulkan
+```
+
 ## 本项目与官方 Real-ESRGAN 的区别
 
 | 能力 | 官方 Real-ESRGAN / NCNN-Vulkan | 本项目 |
@@ -34,6 +71,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 | 批量壁纸 | 上游程序有自己的文件/文件夹输入方式 | 增加多输入、递归、单图失败隔离和汇总日志 |
 | 对比图 | 官方可执行程序不生成 | 默认自动生成可重复的细节前后对比图 |
 | Windows 上手流程 | 提供程序与上游说明 | 增加校验安装、本地 Python 环境、拖放、快捷方式和修复指引 |
+| Agent / 自然语言调用 | 直接提供命令行参数 | 把自然语言壁纸需求映射为文档化的封装参数 |
 
 真正执行超分的是上游项目。本仓库的独立价值，是围绕上游推理整理出的 Windows 壁纸工作流。
 
