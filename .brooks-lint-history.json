@@ -1,0 +1,13 @@
+[
+  {
+    "date": "2026-07-25",
+    "mode": "Architecture Audit",
+    "score": 91,
+    "findings": {
+      "critical": 0,
+      "warning": 1,
+      "suggestion": 1
+    },
+    "scope": "entire project, including the Windows installer and GitHub Actions workflow"
+  }
+]
