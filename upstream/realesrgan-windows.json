@@ -1,0 +1,22 @@
+{
+  "repository": "https://github.com/xinntao/Real-ESRGAN",
+  "release": "https://github.com/xinntao/Real-ESRGAN/releases/tag/v0.2.5.0",
+  "assetUrl": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-windows.zip",
+  "assetName": "realesrgan-ncnn-vulkan-20220424-windows.zip",
+  "assetSize": 45474481,
+  "sha256": "abc02804e17982a3be33675e4d471e91ea374e65b70167abc09e31acb412802d",
+  "installDirectory": "realesrgan-ncnn-vulkan-20220424-windows",
+  "requiredFiles": [
+    "realesrgan-ncnn-vulkan.exe",
+    "README_windows.md",
+    "models/realesrgan-x4plus-anime.param",
+    "models/realesrgan-x4plus-anime.bin",
+    "models/realesr-animevideov3-x2.param",
+    "models/realesr-animevideov3-x2.bin",
+    "models/realesr-animevideov3-x3.param",
+    "models/realesr-animevideov3-x3.bin",
+    "models/realesr-animevideov3-x4.param",
+    "models/realesr-animevideov3-x4.bin"
+  ],
+  "licenseUrl": "https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/blob/37026f49824c5cf84062e7c6a5dd71445dcf610f/LICENSE"
+}

@@ -1,0 +1,9 @@
+{
+  "goal": {
+    "minimumNetStars": 30,
+    "windowDays": 30
+  },
+  "release": {
+    "status": "planned"
+  }
+}

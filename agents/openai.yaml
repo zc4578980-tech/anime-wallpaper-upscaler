@@ -1,3 +1,3 @@
-display_name: Anime Wallpaper Upscale
-short_description: AI-upscale anime images into sharp desktop wallpapers.
-default_prompt: Make this anime image clearer and turn it into a wallpaper.
+display_name: Anime Wallpaper Upscaler
+short_description: Turn images into screen-ready Windows wallpapers with official Real-ESRGAN, drag/drop setup, and composition preservation.
+default_prompt: Use the local official Real-ESRGAN workflow to upscale these images into screen-ready Windows wallpapers, preserve the full composition, and detect my screen and Vulkan GPU automatically.
