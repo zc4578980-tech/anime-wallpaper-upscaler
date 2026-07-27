@@ -4,6 +4,9 @@
     "windowDays": 30
   },
   "release": {
-    "status": "planned"
+    "status": "released",
+    "date": "2026-07-27",
+    "baselineStars": 0,
+    "baselineEvidence": "docs/release/evidence/release-day.md"
   }
 }

@@ -1,19 +1,19 @@
 # Launch Evidence Audit
 
-Date: 2026-07-25
+Date: 2026-07-27
 
-Status: **Pre-release research only.**
+Status: **Release-day measurement active.**
 
-No external placement has been made for this project, so there is no pre-release traffic or Star
-evidence to claim. That is an honest baseline, not a reason to prevent the technical release.
-After a separately authorized release, store timestamped release-day and checkpoint evidence in
-this directory or link to stable public URLs from `measurement.csv`.
+The separately authorized v0.2.0 release starts from the timestamped public Star baseline in
+[`release-day.md`](release-day.md). No external placement had been made when that baseline was
+captured. Store later checkpoint evidence in this directory or link to stable public URLs from
+`measurement.csv`.
 
 ## Candidate Channels
 
 | Candidate/source | Current state | Evidence standard after release |
 | --- | --- | --- |
-| GitHub native discovery | Public repository; no custom Topics or social preview yet | Public repository metric checkpoint and referrer data when available |
+| GitHub native discovery | Public repository with descriptive Topics; no custom social preview | Public repository metric checkpoint and referrer data when available |
 | Agent-skill directories | No accepted listing | Accepted listing URL and attributable traffic evidence |
 | Product Hunt Open Source | No project page | Public launch URL and dated view/referrer evidence |
 | Show HN | No submission | Public thread URL and dated repository metrics |
