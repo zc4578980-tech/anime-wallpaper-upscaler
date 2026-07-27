@@ -222,6 +222,7 @@ try {
             -Launcher $cmdLauncher `
             -Arguments @("echo dependency failure 1>&2 & exit /b 7")
     }
+    $global:LASTEXITCODE = 0
 
     $installerEntry = Get-Content -LiteralPath (Join-Path $projectRoot "install.cmd") -Raw
     Assert-True ($installerEntry -match "setup\.ps1") "double-click installer delegates to the reviewed PowerShell setup"
