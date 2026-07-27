@@ -20,6 +20,9 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
   PR records the release notes and measurement baseline before tag publication.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
+- Hotfix status: local branch `codex/v0.2.1-installer-warning-fix` prevents Windows PowerShell
+  5.1 from treating successful `pip` stderr warnings as fatal setup errors. The fix is tested
+  locally but is not yet pushed, merged, or published.
 
 ## Key Paths
 
@@ -166,6 +169,18 @@ reported 0 Stars at `2026-07-27T15:32:28+08:00`; the immutable Day 0 record is
 measurement row, evidence index, and factual Release Notes before creating the tag and GitHub
 Release. Announcement and external channel placement remain outside this authorization.
 
+On 2026-07-27, a clean downloaded v0.2.0 archive reproduced a Windows PowerShell 5.1 setup
+failure when `pip` emitted `Cache entry deserialization failed` to stderr despite returning exit
+code 0. The installer had merged stderr into stdout with `2>&1 | Out-Host`, converting the warning
+to a terminating `NativeCommandError` under `ErrorActionPreference=Stop`. The hotfix keeps native
+stderr separate and routes virtual-environment checks and dependency installation through the
+exit-code-checked Python launcher. A new regression proves successful stderr warnings continue
+while exit code 7 still fails. Validation passed 75 Python tests, 29 setup assertions, 9 launcher
+assertions, compile/help checks, a repaired setup rerun from the exact Downloads path, and a real
+2x RTX 5070 Ti inference (`Succeeded: 1`, `Failed: 0`). The environment could not connect to
+`github.com:443`; the end-to-end rerun therefore reused the already downloaded official archive
+after independently verifying its pinned 45,474,481-byte size and SHA-256.
+
 ## Blockers And Risks
 
 - The first-month Star goal starts from the recorded baseline of 0. It remains an outcome target,
@@ -173,6 +188,8 @@ Release. Announcement and external channel placement remain outside this authori
 - Real-ESRGAN executable and model files remain external, ignored dependencies.
 - GitHub homepage and custom social preview remain optional public-positioning decisions.
   Announcement and external channel placement require separate authorization.
+- The published v0.2.0 source archive still contains the PowerShell stderr warning bug until the
+  local hotfix is reviewed, pushed, merged, and released as a patch version.
 
 ## Next Session
 
@@ -185,6 +202,8 @@ Release. Announcement and external channel placement remain outside this authori
 4. The user will handle any optional recording; do not make it an engineering release blocker.
 5. Do not add a complex GUI merely to chase Stars; keep further work focused on setup friction,
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
+6. Review and publish `codex/v0.2.1-installer-warning-fix` through a protected hotfix PR before
+   asking ordinary users to retry the public installer.
 
 ## Update Rule
 
