@@ -203,6 +203,27 @@ try {
     Assert-True ($script:observedWingetArguments -contains "--accept-package-agreements") "winget bootstrap accepts package agreements only after user consent"
     Assert-True ($script:observedWingetArguments -contains "--accept-source-agreements") "winget bootstrap accepts source agreements only after user consent"
 
+    $cmdLauncher = [pscustomobject]@{
+        Command = (Get-Command "cmd.exe").Source
+        PrefixArguments = @("/d", "/c")
+    }
+    $warningWasRejected = $false
+    try {
+        Invoke-PythonLauncher `
+            -Launcher $cmdLauncher `
+            -Arguments @("echo benign pip warning 1>&2 & exit /b 0")
+    }
+    catch {
+        $warningWasRejected = $true
+    }
+    Assert-True (-not $warningWasRejected) "native stderr warnings do not fail a successful Python command"
+    Assert-Throws -Message "nonzero native exit code still fails a Python command" -Action {
+        Invoke-PythonLauncher `
+            -Launcher $cmdLauncher `
+            -Arguments @("echo dependency failure 1>&2 & exit /b 7")
+    }
+    $global:LASTEXITCODE = 0
+
     $installerEntry = Get-Content -LiteralPath (Join-Path $projectRoot "install.cmd") -Raw
     Assert-True ($installerEntry -match "setup\.ps1") "double-click installer delegates to the reviewed PowerShell setup"
     Assert-True ($installerEntry -notmatch "AcceptUpstreamLicense") "double-click installer does not bypass upstream license confirmation"

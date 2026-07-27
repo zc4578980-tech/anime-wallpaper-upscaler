@@ -14,12 +14,14 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
 
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
   acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete.
-  PR #1 is merged into protected `main`, its post-merge Windows verification is green, and the
-  separately authorized formal release has a recorded Day 0 Star baseline.
-- Version: v0.2.0 release source merged to `main` as `445e83a`; a protected release-preparation
-  PR records the release notes and measurement baseline before tag publication.
+  The formal v0.2.0 release has a recorded Day 0 Star baseline, and v0.2.1 carries the first
+  installer hotfix without changing the inference workflow.
+- Version: v0.2.0 is published from protected `main`; v0.2.1 fixes Windows PowerShell 5.1 native
+  stderr handling in setup and adds a regression for the exact warning pattern.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
+- Hotfix: v0.2.1 prevents Windows PowerShell 5.1 from treating successful `pip` stderr warnings
+  as fatal setup errors while preserving nonzero-exit failure handling.
 
 ## Key Paths
 
@@ -166,6 +168,18 @@ reported 0 Stars at `2026-07-27T15:32:28+08:00`; the immutable Day 0 record is
 measurement row, evidence index, and factual Release Notes before creating the tag and GitHub
 Release. Announcement and external channel placement remain outside this authorization.
 
+On 2026-07-27, a clean downloaded v0.2.0 archive reproduced a Windows PowerShell 5.1 setup
+failure when `pip` emitted `Cache entry deserialization failed` to stderr despite returning exit
+code 0. The installer had merged stderr into stdout with `2>&1 | Out-Host`, converting the warning
+to a terminating `NativeCommandError` under `ErrorActionPreference=Stop`. The hotfix keeps native
+stderr separate and routes virtual-environment checks and dependency installation through the
+exit-code-checked Python launcher. A new regression proves successful stderr warnings continue
+while exit code 7 still fails. Validation passed 75 Python tests, 29 setup assertions, 9 launcher
+assertions, compile/help checks, a repaired setup rerun from the exact Downloads path, and a real
+2x RTX 5070 Ti inference (`Succeeded: 1`, `Failed: 0`). The environment could not connect to
+`github.com:443`; the end-to-end rerun therefore reused the already downloaded official archive
+after independently verifying its pinned 45,474,481-byte size and SHA-256.
+
 ## Blockers And Risks
 
 - The first-month Star goal starts from the recorded baseline of 0. It remains an outcome target,
@@ -173,6 +187,8 @@ Release. Announcement and external channel placement remain outside this authori
 - Real-ESRGAN executable and model files remain external, ignored dependencies.
 - GitHub homepage and custom social preview remain optional public-positioning decisions.
   Announcement and external channel placement require separate authorization.
+- The immutable v0.2.0 source archive contains the PowerShell stderr warning bug; users should
+  install v0.2.1 or newer for the corrected setup behavior.
 
 ## Next Session
 
@@ -185,6 +201,8 @@ Release. Announcement and external channel placement remain outside this authori
 4. The user will handle any optional recording; do not make it an engineering release blocker.
 5. Do not add a complex GUI merely to chase Stars; keep further work focused on setup friction,
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
+6. Verify the public v0.2.1 source download on Windows and monitor installer reports without
+   weakening the pinned official archive or license checks.
 
 ## Update Rule
 

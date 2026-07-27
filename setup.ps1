@@ -78,7 +78,7 @@ function Invoke-WingetPythonInstall {
     if ($null -eq $winget) {
         throw "Windows Package Manager (winget) is not available.`n$script:PythonRepair"
     }
-    & $winget.Source @Arguments 2>&1 | Out-Host
+    & $winget.Source @Arguments | Out-Host
     return $LASTEXITCODE
 }
 
@@ -159,7 +159,10 @@ function Invoke-PythonLauncher {
     )
 
     $allArguments = @($Launcher.PrefixArguments) + $Arguments
-    & $Launcher.Command @allArguments 2>&1 | Out-Host
+    # Keep native stderr separate. Windows PowerShell 5.1 turns `2>&1` output
+    # into NativeCommandError records, so harmless warnings can terminate setup
+    # while ErrorActionPreference is Stop.
+    & $Launcher.Command @allArguments | Out-Host
     if ($LASTEXITCODE -ne 0) {
         throw "Python command failed with exit code ${LASTEXITCODE}: $($Arguments -join ' ')"
     }
@@ -180,16 +183,28 @@ function Install-PythonEnvironment {
         Invoke-PythonLauncher -Launcher $Launcher -Arguments @("-m", "venv", $venvRoot) | Out-Host
     }
 
-    & $venvPython -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)" 2>&1 | Out-Host
-    if ($LASTEXITCODE -ne 0) {
+    $venvLauncher = [pscustomobject]@{
+        Command = $venvPython
+        PrefixArguments = @()
+    }
+    try {
+        Invoke-PythonLauncher `
+            -Launcher $venvLauncher `
+            -Arguments @("-c", "import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)")
+    }
+    catch {
         throw "The existing .venv does not use Python 3.10 or newer. Remove '$venvRoot' and run setup.ps1 again.`n$script:PythonRepair"
     }
 
     $requirements = Join-Path $ProjectRoot "requirements.txt"
     Write-Host "Installing Python dependencies into the project environment"
-    & $venvPython -m pip install --disable-pip-version-check -r $requirements 2>&1 | Out-Host
-    if ($LASTEXITCODE -ne 0) {
-        throw "Python dependency installation failed. Check the network, then run .\setup.ps1 again."
+    try {
+        Invoke-PythonLauncher `
+            -Launcher $venvLauncher `
+            -Arguments @("-m", "pip", "install", "--disable-pip-version-check", "-r", $requirements)
+    }
+    catch {
+        throw "Python dependency installation failed. Check the network, then run .\setup.ps1 again.`n$($_.Exception.Message)"
     }
     return $venvPython
 }
@@ -260,7 +275,7 @@ function Invoke-HttpDownload {
     $request.AllowAutoRedirect = $true
     $request.Timeout = 20000
     $request.ReadWriteTimeout = 60000
-    $request.UserAgent = "anime-wallpaper-upscaler-setup/0.2.0"
+    $request.UserAgent = "anime-wallpaper-upscaler-setup/0.2.1"
     if ($ResumeFrom -gt 0) {
         $request.AddRange($ResumeFrom)
     }
