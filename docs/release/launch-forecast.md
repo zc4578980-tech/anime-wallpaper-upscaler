@@ -1,6 +1,6 @@
 # v0.2.0 First-Month Star Goal
 
-**Status: Ready to measure after release**
+**Status: Measurement active from the v0.2.0 release**
 
 The public success target is at least 30 net new GitHub Stars in the first 30 calendar days
 after the v0.2.0 Release. This is a post-release outcome target, not a claim that Stars can be
@@ -14,12 +14,11 @@ The target is met when net new Stars are at least 30. Organic community interest
 paid, artificial, or undisclosed Star acquisition is not acceptable evidence for an internship
 portfolio or project report.
 
-## Pre-Release Readiness
+## Release Readiness
 
-The release candidate is technically verified and is available in Draft PR #1. A public release
-can be authorized on technical and review evidence without inventing pre-launch visits. It still
-requires an explicit release decision; this document does not authorize a tag, GitHub Release,
-or announcement by itself.
+The release candidate was technically verified, merged through PR #1, and separately authorized
+for publication. The release-day baseline is recorded before the v0.2.0 tag and GitHub Release;
+announcement and channel placement remain separate actions.
 
 There is no reliable pre-release forecast in the checked-in data. The former 1,000-visit and
 three-channel forecast was removed because it required the very public launch activity it
@@ -27,8 +26,7 @@ prohibited, making formal release impossible to reach honestly.
 
 ## Measurement Contract
 
-Before publishing v0.2.0, update `docs/release/launch-plan.json` from `planned` to `released`
-and record:
+The v0.2.0 release records these fields in `docs/release/launch-plan.json` before publication:
 
 - `release.date`: the ISO release date;
 - `release.baselineStars`: the public GitHub Star count immediately before release; and

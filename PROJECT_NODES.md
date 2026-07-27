@@ -13,12 +13,11 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
 ## Current State
 
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
-  acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete;
-  a Windows GitHub Actions verification workflow is green for the Draft PR; formal release
-  awaits PR review and separate authorization, while the first-month Star goal is ready for
-  release-day measurement.
-- Version: v0.2.0 release candidate on `codex/v0.2.0-integration`, pushed as Draft PR #1;
-  no tag or GitHub Release created.
+  acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete.
+  PR #1 is merged into protected `main`, its post-merge Windows verification is green, and the
+  separately authorized formal release has a recorded Day 0 Star baseline.
+- Version: v0.2.0 release source merged to `main` as `445e83a`; a protected release-preparation
+  PR records the release notes and measurement baseline before tag publication.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
 
@@ -156,23 +155,33 @@ processed the original demo through the real launcher when `cmd.exe` supplied `2
 5070 Ti at 2560x1600 and producing the expected wallpaper, comparison, and log. PR #1's Windows
 verification run `30165034891` passed; the PR remains Draft and no Release activity occurred.
 
+On 2026-07-26, Draft PR #1 was marked Ready after explicit authorization and merged into
+protected `main` as `445e83a`. The post-merge Windows verification run `30188336494` passed, and
+local `main` was fast-forwarded to the exact remote merge commit. No branch was deleted and no
+tag, Release, or announcement was created during the merge operation.
+
+On 2026-07-27, formal v0.2.0 publication was separately authorized. The public GitHub API
+reported 0 Stars at `2026-07-27T15:32:28+08:00`; the immutable Day 0 record is
+`docs\release\evidence\release-day.md`. A release-preparation PR updates the launch plan,
+measurement row, evidence index, and factual Release Notes before creating the tag and GitHub
+Release. Announcement and external channel placement remain outside this authorization.
+
 ## Blockers And Risks
 
-- The first-month Star goal has no baseline until release day. It cannot be evaluated or presented
-  as evidence until an authorized release records public baseline data.
+- The first-month Star goal starts from the recorded baseline of 0. It remains an outcome target,
+  not a guarantee; Day 1/3/7/14/30 observations must use real public counts.
 - Real-ESRGAN executable and model files remain external, ignored dependencies.
-- GitHub homepage, Topics, and custom social preview require separate public-positioning
-  decisions. Do not tag, announce, or create a Release without separate authorization.
+- GitHub homepage and custom social preview remain optional public-positioning decisions.
+  Announcement and external channel placement require separate authorization.
 
 ## Next Session
 
-1. Read this file, `docs\release\launch-forecast.md`, and the verification summary; inspect the
-   integration branch, merge commit `e3eb1e2`, and Draft PR #1.
-2. When a release is separately authorized, record its public Star baseline and evidence in
-   `docs\release\launch-plan.json`, then collect the day 1/3/7/14/30 checkpoints in
-   `docs\release\measurement.csv`.
-3. Keep the repository public but do not tag, announce, or create a v0.2.0 Release until the
-   user separately authorizes release actions.
+1. Read this file, `docs\release\launch-forecast.md`, and `docs\release\evidence\release-day.md`;
+   inspect merged PR #1, protected `main`, and the v0.2.0 Release.
+2. Collect the real day 1/3/7/14/30 Star checkpoints in `docs\release\measurement.csv` and keep
+   timestamped evidence for every observation.
+3. Keep announcements and external channel placement separate from the technical Release unless
+   the user explicitly authorizes them.
 4. The user will handle any optional recording; do not make it an engineering release blocker.
 5. Do not add a complex GUI merely to chase Stars; keep further work focused on setup friction,
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
