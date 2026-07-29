@@ -15,12 +15,12 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
   acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete.
   The formal v0.2.0 release has a recorded Day 0 Star baseline, and v0.2.1 carries the first
-  installer hotfix without changing the inference workflow. Draft PR #4 now carries the v0.2.2
-  candidate that keeps an existing Codex Skill path unchanged and continues core setup instead of
-  failing installation.
+  installer hotfix without changing the inference workflow. The v0.2.2 Skill-conflict hotfix is
+  now merged into protected `main`; tag, archive, and GitHub Release publication remain separate
+  authorization gates.
 - Version: v0.2.0 and v0.2.1 are published from protected `main`; v0.2.1 fixes Windows PowerShell
-  5.1 native stderr handling. The pushed `codex/v0.2.2-skill-conflict` branch fixes optional Skill
-  registration conflicts in Draft PR #4 and is not yet a public release.
+  5.1 native stderr handling. Protected `main` now also fixes optional Skill registration
+  conflicts through merged PR #4, but v0.2.2 is not yet a tagged or published release.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
 - Hotfix: v0.2.1 prevents Windows PowerShell 5.1 from treating successful `pip` stderr warnings
@@ -200,9 +200,11 @@ On 2026-07-29, the focused v0.2.2 preparation added a package-version assertion 
 Release Notes. Local verification passed 75 Python tests, 33 setup assertions, 9 launcher
 assertions, compile/help, and whitespace checks. After task review reported spec compliance and
 approved quality with no findings, branch `codex/v0.2.2-skill-conflict` was pushed and Draft PR #4
-was created: `https://github.com/zc4578980-tech/anime-wallpaper-upscaler/pull/4`. Its head was
-`c870a82`, GitHub reported it mergeable, and Windows verification run `30460926532` passed. The PR
-remains Draft; no merge, tag, archive, or GitHub Release has been authorized or performed.
+was created: `https://github.com/zc4578980-tech/anime-wallpaper-upscaler/pull/4`. Its final head was
+`9ac05ff`; it was marked Ready and merged into protected `main` as `2227ec3` after explicit
+authorization. Local merged-main verification passed 75 Python tests, 33 setup assertions, 9
+launcher assertions, compile/help, and whitespace checks. Post-merge Windows verification run
+`30463861684` passed. No tag, archive, or GitHub Release has been authorized or performed.
 
 ## Blockers And Risks
 
@@ -230,8 +232,9 @@ remains Draft; no merge, tag, archive, or GitHub Release has been authorized or 
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
 6. Verify the public v0.2.1 source download on Windows and monitor installer reports without
    weakening the pinned official archive or license checks.
-7. Review Draft PR #4 and, only after explicit authorization, mark it Ready and merge through
-   protected `main`. Tag/archive publication and the GitHub Release remain later, separate gates.
+7. After this node correction reaches protected `main`, require separate authorization for the
+   v0.2.2 tag/archive and then another authorization for the GitHub Release and downloaded-ZIP
+   verification.
 
 ## Update Rule
 
