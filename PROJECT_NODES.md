@@ -15,13 +15,18 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
 - Status: v0.2.0 implementation, one-click installation, Agent-first discovery, technical
   acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete.
   The formal v0.2.0 release has a recorded Day 0 Star baseline, and v0.2.1 carries the first
-  installer hotfix without changing the inference workflow.
-- Version: v0.2.0 is published from protected `main`; v0.2.1 fixes Windows PowerShell 5.1 native
-  stderr handling in setup and adds a regression for the exact warning pattern.
+  installer hotfix without changing the inference workflow. A local v0.2.2 candidate now keeps
+  an existing Codex Skill path unchanged and continues core setup instead of failing installation.
+- Version: v0.2.0 and v0.2.1 are published from protected `main`; v0.2.1 fixes Windows PowerShell
+  5.1 native stderr handling. The unpushed `codex/v0.2.2-skill-conflict` branch fixes optional
+  Skill registration conflicts and is not yet a public release.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
 - Hotfix: v0.2.1 prevents Windows PowerShell 5.1 from treating successful `pip` stderr warnings
   as fatal setup errors while preserving nonzero-exit failure handling.
+- Hotfix candidate: when another Codex Skill directory or junction already occupies the default
+  destination, setup warns, preserves it, and continues. `-ReplaceSkillLink` still refuses to
+  remove a non-junction path.
 
 ## Key Paths
 
@@ -180,6 +185,16 @@ assertions, compile/help checks, a repaired setup rerun from the exact Downloads
 `github.com:443`; the end-to-end rerun therefore reused the already downloaded official archive
 after independently verifying its pinned 45,474,481-byte size and SHA-256.
 
+On 2026-07-29, the public v0.2.1 ZIP installed Python dependencies and the verified official
+runtime successfully but then failed because the default Codex Skill destination already pointed
+to the development checkout. The installer correctly refused to replace that junction, but the
+optional registration conflict incorrectly aborted core setup. The local v0.2.2 candidate now
+warns and skips a non-matching existing path while retaining explicit replacement safeguards. A
+regression using a real temporary junction failed before the fix and passed afterward. Fresh
+verification passed 75 Python tests, 32 setup assertions, 9 launcher assertions, compile/help,
+and whitespace checks. The original downloaded v0.2.1 copy then completed with `-SkipSkill`,
+reused its verified runtime, created the desktop shortcut, and passed its CLI smoke test.
+
 ## Blockers And Risks
 
 - The first-month Star goal starts from the recorded baseline of 0. It remains an outcome target,
@@ -189,6 +204,9 @@ after independently verifying its pinned 45,474,481-byte size and SHA-256.
   Announcement and external channel placement require separate authorization.
 - The immutable v0.2.0 source archive contains the PowerShell stderr warning bug; users should
   install v0.2.1 or newer for the corrected setup behavior.
+- The public v0.2.1 installer can still abort when the default Codex Skill destination already
+  exists with another target. Until a separately authorized v0.2.2 release is published, rerun
+  `setup.ps1 -AcceptUpstreamLicense -SkipSkill` to complete core setup without changing that path.
 
 ## Next Session
 
@@ -203,6 +221,8 @@ after independently verifying its pinned 45,474,481-byte size and SHA-256.
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
 6. Verify the public v0.2.1 source download on Windows and monitor installer reports without
    weakening the pinned official archive or license checks.
+7. Review and, only after explicit authorization, push the local v0.2.2 Skill-conflict hotfix,
+   create its PR, wait for Windows CI, merge through protected `main`, and publish a new Release.
 
 ## Update Rule
 

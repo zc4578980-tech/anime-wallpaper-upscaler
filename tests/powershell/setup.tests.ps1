@@ -229,13 +229,29 @@ try {
     Assert-True ($installerEntry -notmatch "AcceptUpstreamLicense") "double-click installer does not bypass upstream license confirmation"
 
     $source = Join-Path $script:testRoot "skill-source"
+    $existingSource = Join-Path $script:testRoot "existing-skill-source"
     $destination = Join-Path $script:testRoot "skill-destination"
-    New-Item -ItemType Directory -Path $source, $destination | Out-Null
-    Set-Content -LiteralPath (Join-Path $destination "keep.txt") -Value "do not overwrite"
-    Assert-Throws -Message "non-matching skill path requires explicit consent" -Action {
-        Install-AgentSkill -ProjectRoot $source -Destination $destination
+    New-Item -ItemType Directory -Path $source, $existingSource | Out-Null
+    New-Item -ItemType Junction -Path $destination -Target $existingSource | Out-Null
+
+    $skillWarnings = @()
+    $skillResult = Install-AgentSkill `
+        -ProjectRoot $source `
+        -Destination $destination `
+        -WarningVariable skillWarnings
+    $preservedTarget = @((Get-Item -LiteralPath $destination -Force).Target) | Select-Object -First 1
+    $preservedTarget = [System.IO.Path]::GetFullPath($preservedTarget).TrimEnd("\")
+    Assert-True ($null -eq $skillResult) "a non-matching existing skill link is skipped without failing setup"
+    Assert-Equal ([System.IO.Path]::GetFullPath($existingSource).TrimEnd("\")) $preservedTarget "the existing skill link target is preserved"
+    Assert-True (($skillWarnings -join "`n") -match "kept unchanged") "the skipped skill registration explains that the existing path was preserved"
+
+    $directoryDestination = Join-Path $script:testRoot "skill-directory"
+    New-Item -ItemType Directory -Path $directoryDestination | Out-Null
+    Set-Content -LiteralPath (Join-Path $directoryDestination "keep.txt") -Value "do not overwrite"
+    Assert-Throws -Message "explicit replacement still refuses a non-junction skill path" -Action {
+        Install-AgentSkill -ProjectRoot $source -Destination $directoryDestination -ReplaceSkillLink
     }
-    Assert-True (Test-Path -LiteralPath (Join-Path $destination "keep.txt") -PathType Leaf) "non-matching skill path is not overwritten"
+    Assert-True (Test-Path -LiteralPath (Join-Path $directoryDestination "keep.txt") -PathType Leaf) "a non-junction skill path is never overwritten"
 }
 finally {
     if (Test-Path -LiteralPath $script:testRoot) {
