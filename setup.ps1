@@ -275,7 +275,7 @@ function Invoke-HttpDownload {
     $request.AllowAutoRedirect = $true
     $request.Timeout = 20000
     $request.ReadWriteTimeout = 60000
-    $request.UserAgent = "anime-wallpaper-upscaler-setup/0.2.1"
+    $request.UserAgent = "anime-wallpaper-upscaler-setup/0.2.2"
     if ($ResumeFrom -gt 0) {
         $request.AddRange($ResumeFrom)
     }
@@ -573,7 +573,8 @@ function Install-AgentSkill {
             return $destinationPath
         }
         if (-not $ReplaceSkillLink) {
-            throw "Codex skill destination already exists and was not changed.`nExisting: $destinationPath`nRequested target: $sourcePath`nUse -ReplaceSkillLink only after confirming the existing path is a replaceable junction."
+            Write-Warning "Codex skill registration was skipped because another item already exists at: $destinationPath`nThe existing path was kept unchanged. Core setup will continue.`nTo intentionally replace a junction, rerun setup.ps1 with -ReplaceSkillLink."
+            return $null
         }
         if (-not ($existing.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
             throw "Refusing to remove a non-junction skill path: $destinationPath. Move it manually if replacement is intended."
