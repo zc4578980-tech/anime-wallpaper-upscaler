@@ -119,7 +119,8 @@ pinned official Real-ESRGAN runtime remain unchanged.
 - 33 setup assertions passed, including a real temporary Junction conflict.
 - 9 launcher assertions passed.
 - Compilation, CLI help, and whitespace checks passed.
-- A downloaded Windows ZIP completed while preserving an existing Codex Skill Junction.
+- A real temporary Junction regression passed; published-ZIP re-download verification remains a
+  separate Release gate.
 
 Downloaded upstream software and models remain subject to their upstream terms. See
 [Third-Party Notices](../../THIRD_PARTY_NOTICES.md).
