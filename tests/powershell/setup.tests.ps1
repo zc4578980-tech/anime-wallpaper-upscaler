@@ -228,6 +228,9 @@ try {
     Assert-True ($installerEntry -match "setup\.ps1") "double-click installer delegates to the reviewed PowerShell setup"
     Assert-True ($installerEntry -notmatch "AcceptUpstreamLicense") "double-click installer does not bypass upstream license confirmation"
 
+    $setupSource = Get-Content -LiteralPath (Join-Path $projectRoot "setup.ps1") -Raw
+    Assert-True ($setupSource -match 'anime-wallpaper-upscaler-setup/0\.2\.2') "setup network requests identify the v0.2.2 package"
+
     $source = Join-Path $script:testRoot "skill-source"
     $existingSource = Join-Path $script:testRoot "existing-skill-source"
     $destination = Join-Path $script:testRoot "skill-destination"

@@ -275,7 +275,7 @@ function Invoke-HttpDownload {
     $request.AllowAutoRedirect = $true
     $request.Timeout = 20000
     $request.ReadWriteTimeout = 60000
-    $request.UserAgent = "anime-wallpaper-upscaler-setup/0.2.1"
+    $request.UserAgent = "anime-wallpaper-upscaler-setup/0.2.2"
     if ($ResumeFrom -gt 0) {
         $request.AddRange($ResumeFrom)
     }
