@@ -16,16 +16,15 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
   acceptance, rights-safe demo visuals, and the reviewed `origin/main` integration complete.
   The formal v0.2.0 release has a recorded Day 0 Star baseline, and v0.2.1 carries the first
   installer hotfix without changing the inference workflow. The v0.2.2 Skill-conflict hotfix is
-  now merged into protected `main`; tag, archive, and GitHub Release publication remain separate
-  authorization gates.
-- Version: v0.2.0 and v0.2.1 are published from protected `main`; v0.2.1 fixes Windows PowerShell
-  5.1 native stderr handling. Protected `main` now also fixes optional Skill registration
-  conflicts through merged PR #4, but v0.2.2 is not yet a tagged or published release.
+  published from protected `main`, and its downloaded Windows ZIP completed the release
+  verification path while preserving the existing Codex Skill Junction.
+- Version: v0.2.0, v0.2.1, and v0.2.2 are published from protected `main`. v0.2.1 fixes Windows
+  PowerShell 5.1 native stderr handling; v0.2.2 fixes optional Skill registration conflicts.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
   Laptop GPU, at an automatically detected 2560x1600 target.
 - Hotfix: v0.2.1 prevents Windows PowerShell 5.1 from treating successful `pip` stderr warnings
   as fatal setup errors while preserving nonzero-exit failure handling.
-- Hotfix candidate: when another Codex Skill directory or junction already occupies the default
+- v0.2.2 hotfix: when another Codex Skill directory or junction already occupies the default
   destination, setup warns, preserves it, and continues. `-ReplaceSkillLink` still refuses to
   remove a non-junction path.
 
@@ -206,6 +205,20 @@ authorization. Local merged-main verification passed 75 Python tests, 33 setup a
 launcher assertions, compile/help, and whitespace checks. Post-merge Windows verification run
 `30463861684` passed. No tag, archive, or GitHub Release has been authorized or performed.
 
+On 2026-07-31, annotated tag `v0.2.2` was pushed at protected-main commit `24d113a`, and the public
+GitHub Release was created at
+`https://github.com/zc4578980-tech/anime-wallpaper-upscaler/releases/tag/v0.2.2`. Its only asset,
+`anime-wallpaper-upscaler-v0.2.2-windows.zip`, is 404,215 bytes with SHA-256
+`1bef464ae75873f481c1f56eaf0dfc3772014fc1cf11d8f834d23e4a27b13027`. A fresh download through
+`gh release download` produced the same size and digest. The extracted published archive created
+its `.venv`,
+verified and installed every pinned runtime file, preserved the existing Codex Skill Junction to
+the development checkout, created the desktop shortcut, passed CLI help, and exited `0`. The
+official 45,474,481-byte runtime ZIP used to finish this slow-network verification was a local
+cache freshly rechecked against pinned SHA-256
+`abc02804e17982a3be33675e4d471e91ea374e65b70167abc09e31acb412802d`; the preceding live download
+reached 16,612,866 bytes before that partial was preserved separately.
+
 ## Blockers And Risks
 
 - The first-month Star goal starts from the recorded baseline of 0. It remains an outcome target,
@@ -215,14 +228,14 @@ launcher assertions, compile/help, and whitespace checks. Post-merge Windows ver
   Announcement and external channel placement require separate authorization.
 - The immutable v0.2.0 source archive contains the PowerShell stderr warning bug; users should
   install v0.2.1 or newer for the corrected setup behavior.
-- The public v0.2.1 installer can still abort when the default Codex Skill destination already
-  exists with another target. Until a separately authorized v0.2.2 release is published, rerun
-  `setup.ps1 -AcceptUpstreamLicense -SkipSkill` to complete core setup without changing that path.
+- The immutable v0.2.1 installer can still abort when the default Codex Skill destination already
+  exists with another target. New users should install v0.2.2; `-SkipSkill` remains the v0.2.1
+  repair path when upgrading is not immediately possible.
 
 ## Next Session
 
 1. Read this file, `docs\release\launch-forecast.md`, and `docs\release\evidence\release-day.md`;
-   inspect merged PR #1, protected `main`, and the v0.2.0 Release.
+   inspect protected `main`, merged PRs #4/#5, and the v0.2.2 Release.
 2. Collect the real day 1/3/7/14/30 Star checkpoints in `docs\release\measurement.csv` and keep
    timestamped evidence for every observation.
 3. Keep announcements and external channel placement separate from the technical Release unless
@@ -232,9 +245,9 @@ launcher assertions, compile/help, and whitespace checks. Post-merge Windows ver
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
 6. Verify the public v0.2.1 source download on Windows and monitor installer reports without
    weakening the pinned official archive or license checks.
-7. After this node correction reaches protected `main`, require separate authorization for the
-   v0.2.2 tag/archive and then another authorization for the GitHub Release and downloaded-ZIP
-   verification.
+7. Rebase `codex/anime-screenshot-promotion` onto protected `main`, then resume Tasks 2-7 from
+   `docs\superpowers\plans\2026-07-29-anime-screenshot-promotion.md`. Keep its push, PR, social
+   preview upload, Release edit, and external posts as separate authorization gates.
 
 ## Update Rule
 
