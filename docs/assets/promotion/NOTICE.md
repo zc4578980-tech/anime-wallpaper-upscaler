@@ -13,6 +13,6 @@ liability. For a removal request, open a GitHub Issue:
 https://github.com/zc4578980-tech/anime-wallpaper-upscaler/issues
 
 Remove `k-on-source-721x406.jpg`, `k-on-detail-comparison-4x.png`,
-`k-on-wallpaper-2560x1600.jpg`, `k-on-desktop-comparison.png`, and every derived social or
-documentation image. Replace them with the deterministic project-owned demo documented in
-`../NOTICE.md`.
+`k-on-wallpaper-2560x1600.jpg`, `k-on-desktop-comparison.png`, the derived
+`../social-preview.jpg`, and every other derived social or documentation image. Replace them with
+the deterministic project-owned demo documented in `../NOTICE.md`.

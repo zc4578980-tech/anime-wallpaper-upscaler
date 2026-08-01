@@ -107,22 +107,23 @@ def test_promotion_evidence_and_notice_are_explicit() -> None:
     )
     assert (
         "Remove `k-on-source-721x406.jpg`, `k-on-detail-comparison-4x.png`, "
-        "`k-on-wallpaper-2560x1600.jpg`, `k-on-desktop-comparison.png`, and every derived social "
-        "or documentation image. Replace them with the deterministic project-owned demo "
-        "documented in `../NOTICE.md`."
+        "`k-on-wallpaper-2560x1600.jpg`, `k-on-desktop-comparison.png`, the derived "
+        "`../social-preview.jpg`, and every other derived social or documentation image. Replace "
+        "them with the deterministic project-owned demo documented in `../NOTICE.md`."
         in normalized_notice
     )
 
     parent_notice = (ROOT / "docs" / "assets" / "NOTICE.md").read_text(encoding="utf-8")
     normalized_parent_notice = " ".join(parent_notice.split())
     assert (
-        "The four assets listed in the table above are covered by the repository MIT License."
+        "The three assets listed in the table above are covered by the repository MIT License."
         in normalized_parent_notice
     )
     assert (
-        "Files under `docs/assets/promotion/` are not project-owned MIT assets. Their separate "
-        "notice records source uncertainty, non-affiliation, the contact route, and the removal "
-        "map. The repository MIT License does not relicense those images."
+        "Files under `docs/assets/promotion/` and the derived `docs/assets/social-preview.jpg` are "
+        "not project-owned MIT assets. Their separate notice records source uncertainty, "
+        "non-affiliation, the contact route, and the removal map. The repository MIT License does "
+        "not relicense those images."
         in normalized_parent_notice
     )
     assert "These repository-owned assets are covered" not in normalized_parent_notice
