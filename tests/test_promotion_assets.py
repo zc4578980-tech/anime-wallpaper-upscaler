@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from hashlib import sha256
 from pathlib import Path
 
@@ -29,3 +30,29 @@ def test_checked_in_promotion_asset_matches_verified_source(
         assert rendered.size == size
         assert rendered.getbbox() is not None
         assert sum(ImageStat.Stat(rendered).var) > 100
+
+
+def test_promotion_evidence_and_notice_are_explicit() -> None:
+    evidence_path = ROOT / "docs" / "release" / "evidence" / "k-on-promotion-run.json"
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    assert evidence["source"]["sha256"] == CASES[0][2]
+    assert evidence["inference"] == {
+        "engine": "official realesrgan-ncnn-vulkan",
+        "model": "realesrgan-x4plus-anime",
+        "scale": 4,
+        "target": [2560, 1600],
+        "mode": "preserve",
+        "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    }
+    assert evidence["verification"]["succeeded"] == 1
+    assert evidence["verification"]["failed"] == 0
+
+    notice = (PROMOTION / "NOTICE.md").read_text(encoding="utf-8")
+    for required in (
+        "K-ON!",
+        "not licensed for redistribution",
+        "not affiliated",
+        "GitHub Issue",
+        *[case[0] for case in CASES],
+    ):
+        assert required in notice
