@@ -5,7 +5,7 @@ from hashlib import sha256
 from pathlib import Path
 
 import pytest
-from PIL import Image, ImageStat
+from PIL import Image, ImageDraw, ImageStat
 
 ROOT = Path(__file__).parents[1]
 PROMOTION = ROOT / "docs" / "assets" / "promotion"
@@ -126,3 +126,26 @@ def test_promotion_evidence_and_notice_are_explicit() -> None:
         in normalized_parent_notice
     )
     assert "These repository-owned assets are covered" not in normalized_parent_notice
+
+
+def test_promotion_social_preview_has_exact_dimensions(tmp_path: Path) -> None:
+    from scripts.build_promotion_assets import build_social_preview
+
+    detail = tmp_path / "detail.png"
+    wallpaper = tmp_path / "wallpaper.png"
+    output = tmp_path / "social.jpg"
+    Image.new("RGB", (1060, 590), "#e84855").save(detail)
+    wallpaper_image = Image.new("RGB", (2560, 1600), "#2a9d8f")
+    wallpaper_draw = ImageDraw.Draw(wallpaper_image)
+    wallpaper_draw.rectangle((0, 0, 255, 1599), fill="#e84855")
+    wallpaper_draw.rectangle((2304, 0, 2559, 1599), fill="#4267d5")
+    wallpaper_image.save(wallpaper)
+
+    build_social_preview(detail, wallpaper, output)
+
+    with Image.open(output) as image:
+        rendered = image.convert("RGB")
+        assert rendered.size == (1280, 640)
+        assert sum(ImageStat.Stat(rendered).var) > 100
+        assert rendered.getpixel((835, 389))[0] > 150
+        assert rendered.getpixel((1230, 389))[2] > 150
