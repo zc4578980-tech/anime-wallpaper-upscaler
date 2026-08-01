@@ -45,7 +45,7 @@ def _paste_contained(
     canvas.paste(contained, (x, y))
 
 
-def build_social_preview(detail: Path, wallpaper: Path, output: Path) -> None:
+def build_social_preview(detail: Path, desktop_comparison: Path, output: Path) -> None:
     canvas = Image.new("RGB", SIZE, BACKGROUND)
     draw = ImageDraw.Draw(canvas)
     draw.rectangle((0, 0, 12, SIZE[1]), fill=ACCENT)
@@ -58,7 +58,7 @@ def build_social_preview(detail: Path, wallpaper: Path, output: Path) -> None:
         font=_font(18),
     )
     _paste_contained(canvas, _open(detail), (42, 174, 802, 604))
-    _paste_contained(canvas, _open(wallpaper), (828, 174, 1238, 604))
+    _paste_contained(canvas, _open(desktop_comparison), (828, 174, 1238, 604))
     draw.rectangle((42, 174, 802, 604), outline="#69747c", width=2)
     draw.rectangle((828, 174, 1238, 604), outline="#69747c", width=2)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -68,10 +68,16 @@ def build_social_preview(detail: Path, wallpaper: Path, output: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build the anime screenshot campaign preview.")
     parser.add_argument("--detail", required=True, type=Path)
-    parser.add_argument("--wallpaper", required=True, type=Path)
+    parser.add_argument(
+        "--desktop-comparison",
+        "--wallpaper",
+        dest="desktop_comparison",
+        required=True,
+        type=Path,
+    )
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
-    build_social_preview(args.detail, args.wallpaper, args.output)
+    build_social_preview(args.detail, args.desktop_comparison, args.output)
     return 0
 
 

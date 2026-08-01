@@ -150,3 +150,17 @@ def test_promotion_social_preview_has_exact_dimensions(tmp_path: Path) -> None:
         assert sum(ImageStat.Stat(rendered).var) > 100
         assert rendered.getpixel((835, 389))[0] > 150
         assert rendered.getpixel((1230, 389))[2] > 150
+
+
+def test_checked_in_social_preview_uses_selected_comparison_assets(tmp_path: Path) -> None:
+    from scripts.build_promotion_assets import build_social_preview
+
+    rebuilt = tmp_path / "social-preview.jpg"
+    build_social_preview(
+        PROMOTION / "k-on-detail-comparison-4x.png",
+        PROMOTION / "k-on-desktop-comparison.png",
+        rebuilt,
+    )
+
+    checked_in = ROOT / "docs" / "assets" / "social-preview.jpg"
+    assert sha256(checked_in.read_bytes()).hexdigest() == sha256(rebuilt.read_bytes()).hexdigest()
