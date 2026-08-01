@@ -88,30 +88,41 @@ def test_promotion_evidence_and_notice_are_explicit() -> None:
 
     notice = (PROMOTION / "NOTICE.md").read_text(encoding="utf-8")
     normalized_notice = " ".join(notice.split())
-    for required in (
-        "K-ON!",
-        "not licensed for redistribution",
-        "not affiliated",
-        "GitHub Issue",
-        *[case[0] for case in CASES],
-    ):
-        assert required in notice
-    for required in (
-        "does not create permission",
-        "establish fair use",
-        "prevent a DMCA request",
-        "eliminate liability",
-        "and every derived social or documentation image",
-        "deterministic project-owned demo",
-    ):
-        assert required in normalized_notice
+    assert (
+        "These images are **not licensed for redistribution under this repository's MIT "
+        "License**. Anime Wallpaper Upscaler is not affiliated with, sponsored by, or endorsed "
+        "by the creators, publisher, animation studio, broadcaster, production committee, or "
+        "other rightsholders."
+        in normalized_notice
+    )
+    assert (
+        "This notice does not create permission, establish fair use, prevent a DMCA request, or "
+        "eliminate liability."
+        in normalized_notice
+    )
+    assert (
+        "For a removal request, open a GitHub Issue: "
+        "https://github.com/zc4578980-tech/anime-wallpaper-upscaler/issues"
+        in normalized_notice
+    )
+    assert (
+        "Remove `k-on-source-721x406.jpg`, `k-on-detail-comparison-4x.png`, "
+        "`k-on-wallpaper-2560x1600.jpg`, `k-on-desktop-comparison.png`, and every derived social "
+        "or documentation image. Replace them with the deterministic project-owned demo "
+        "documented in `../NOTICE.md`."
+        in normalized_notice
+    )
 
     parent_notice = (ROOT / "docs" / "assets" / "NOTICE.md").read_text(encoding="utf-8")
     normalized_parent_notice = " ".join(parent_notice.split())
-    assert "The four assets listed in the table above are covered" in normalized_parent_notice
     assert (
-        "Files under `docs/assets/promotion/` are not project-owned MIT assets"
+        "The four assets listed in the table above are covered by the repository MIT License."
         in normalized_parent_notice
     )
-    assert "The repository MIT License does not relicense those images" in normalized_parent_notice
+    assert (
+        "Files under `docs/assets/promotion/` are not project-owned MIT assets. Their separate "
+        "notice records source uncertainty, non-affiliation, the contact route, and the removal "
+        "map. The repository MIT License does not relicense those images."
+        in normalized_parent_notice
+    )
     assert "These repository-owned assets are covered" not in normalized_parent_notice
