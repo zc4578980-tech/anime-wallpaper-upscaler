@@ -18,8 +18,8 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
   installer hotfix without changing the inference workflow. The v0.2.2 Skill-conflict hotfix is
   published from protected `main`, and its downloaded Windows ZIP completed the release
   verification path while preserving the existing Codex Skill Junction. An ordinary-user-first
-  screenshot-promotion candidate is locally complete on `codex/anime-screenshot-promotion` at
-  content commit `dec4131`; it has not been pushed or submitted as a PR.
+  screenshot-promotion candidate is open as Draft PR #7 from `codex/anime-screenshot-promotion`.
+  Its content commit is `dec4131`, and its cross-environment preview-test fix is `994584e`.
 - Version: v0.2.0, v0.2.1, and v0.2.2 are published from protected `main`. v0.2.1 fixes Windows
   PowerShell 5.1 native stderr handling; v0.2.2 fixes optional Skill registration conflicts.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
@@ -240,6 +240,16 @@ desktop files directly match the authoritative files under
 public repository and 0 Stars; the launch validator reported day 7 of 30, goal in progress. No
 measurement row was written.
 
+Draft PR #7 was created on 2026-08-03 after separate push/PR authorization:
+`https://github.com/zc4578980-tech/anime-wallpaper-upscaler/pull/7`. Its first Windows verification
+run `30778977141` exposed an invalid cross-environment assumption: different Pillow/Windows JPEG
+encoders produced different bytes for the same rebuilt preview. Commit `994584e` retains the exact
+checked-in social-preview SHA-256 while comparing the two regenerated evidence panels after image
+decoding with a bounded pixel-difference threshold. Local promotion tests passed 7/7 and the full
+suite passed 88/88; replacement Windows run `30779088304` passed Python tests, compile, CLI help,
+and both PowerShell harnesses. The PR remains Draft. No Ready transition, merge, GitHub social-
+preview upload, Release edit, external post, or measurement write occurred.
+
 ## Blockers And Risks
 
 - The first-month Star goal starts from the recorded baseline of 0. It remains an outcome target,
@@ -258,9 +268,9 @@ measurement row was written.
 
 ## Next Session
 
-1. Inspect `codex/anime-screenshot-promotion` and this Task 7 evidence. Obtain explicit approval
-   before pushing the branch and creating a Draft PR; neither action has occurred locally.
-2. Keep Ready/merge, GitHub social-preview upload, Release edit/new Release, every external post,
+1. Review Draft PR #7 and its passing Windows verification. Obtain explicit approval before
+   marking it Ready or merging it into protected `main`.
+2. Keep GitHub social-preview upload, Release edit/new Release, every external post,
    and every `docs\release\measurement.csv` write as separate authorization gates.
 3. Collect only authorized real day 14/30 Star checkpoints with timestamped evidence. The current
    read-only observation is 0 Stars on day 7 of 30, not a forecast or failure verdict.
