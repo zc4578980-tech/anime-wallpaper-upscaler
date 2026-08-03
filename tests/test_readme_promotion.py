@@ -54,3 +54,20 @@ def test_readmes_use_selected_examples_and_reproducible_preview_command() -> Non
         assert "scripts\\build_promotion_assets.py" in text
         assert "--desktop-comparison" in text
         assert '--social-preview ".\\docs\\assets\\social-preview.jpg"' not in text
+
+
+def test_prepared_campaign_copy_is_specific_and_honest() -> None:
+    text = _read("docs/release/anime-screenshot-promotion.md")
+    normalized = " ".join(text.split())
+    assert "Prepared copy only" in text
+    assert "暂停喜欢的一帧，把它留在桌面。" in text
+    assert "Pause a frame. Keep it on your desktop." in text
+    assert "2x/3x/4x" in text
+    assert "docs/assets/social-preview.jpg" in text
+    assert "docs/assets/promotion/k-on-detail-comparison-4x.png" in text
+    assert "docs/assets/promotion/k-on-desktop-comparison.png" in text
+    assert "docs/assets/promotion/NOTICE.md" in text
+    assert "external placement require separate authorization" in normalized
+    assert "30 Stars guaranteed" not in text
+    assert "licensed K-ON" not in text
+    assert "original super-resolution model" not in text
