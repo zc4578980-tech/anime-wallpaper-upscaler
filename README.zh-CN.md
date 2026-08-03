@@ -1,35 +1,57 @@
 # Anime Wallpaper Upscaler
 
-**把动漫、插画和游戏图片做成适配屏幕的 Windows 壁纸，并且不悄悄裁掉原始构图。** 可以一键
-安装、拖放图片、交给 Agent 或使用命令行；默认 `preserve` 模式保留完整图片，用柔化背景填满
-屏幕比例的剩余区域。
+## 暂停喜欢的一帧，把它留在桌面。
 
-**基于官方 Real-ESRGAN 的轻量 Windows 工作流与 Agent Skill。** 首次安装会下载并校验官方
-运行时；之后可处理单张图片或整个文件夹，支持 2x/3x/4x、自动屏幕检测和 Vulkan GPU 检测。
+**番剧截图一键超分，自动生成适配当前屏幕、保留完整构图的高清 Windows 壁纸。** 完成首次
+安装后，把截图拖到桌面快捷方式，选择 2x/3x/4x；工作流会在本机自动检测物理屏幕和 Vulkan GPU。
 
-真正执行推理的是 Real-ESRGAN 和 ncnn；本仓库提供的是围绕它们的 Windows 壁纸工作流，
-不是原创超分算法或模型。
+- 支持 Windows 10/11
+- 全程本地处理，不上传截图
+- 使用官方 Real-ESRGAN NCNN/Vulkan 推理
+- 默认保留完整构图，不悄悄裁掉边缘内容
 
 [English](README.md)
 
-![原创输入图、官方 Real-ESRGAN 超分与保留完整构图的成品壁纸](docs/assets/workflow-overview.jpg)
+## 从番剧截图到桌面壁纸
 
-克隆或解压仓库后，双击 `install.cmd`。阅读脚本显示的上游来源和许可证提示，再确认下载即可；
-不需要自己安装 Real-ESRGAN 可执行程序或模型。
+### 查看 4x 局部细节差异
 
-等价的 PowerShell 命令是：
+![普通放大的 K-ON 截图与经验证的 Real-ESRGAN 4x 结果对比](docs/assets/promotion/k-on-detail-comparison-4x.png)
 
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
-```
+### 查看 2560x1600 Windows 桌面实测
 
-然后把图片或文件夹拖到 `scripts\run-wallpaper.cmd` 或桌面快捷方式上，并选择 2、3、4 倍率。
-如果以后本地组件被删除或不完整，启动器会自动进入同一个校验安装流程，修复后继续处理。
+![上方为原截图直接设为壁纸，下方为 Real-ESRGAN 4x 保留构图壁纸](docs/assets/promotion/k-on-desktop-comparison.png)
 
-上方概览把一张可重复生成的原创技术图依次用于输入、官方上游推理和壁纸构图。该源图及仓库
-内的衍生演示图允许再分发，来源说明见[演示素材声明](docs/assets/NOTICE.md)。
+示例来自同一次本地记录：721x406 截图、官方 `realesrgan-x4plus-anime`、4x、`preserve`
+模式、2560x1600 目标，以及 NVIDIA GeForce RTX 5070 Ti Laptop GPU。
+[运行证据](docs/release/evidence/k-on-promotion-run.json) ·
+[宣传素材声明](docs/assets/promotion/NOTICE.md)
 
-## Agent Skill
+## 三步开始
+
+1. 从 [Releases](https://github.com/zc4578980-tech/anime-wallpaper-upscaler/releases/latest) 下载并解压最新版 Windows ZIP。
+2. 双击 `install.cmd`，阅读上游条款并确认下载经过校验的官方运行时。
+3. 把截图或文件夹拖到生成的桌面快捷方式，选择 2x、3x 或 4x。
+
+不需要手动安装模型。真正执行推理的是 Real-ESRGAN 和 ncnn；本仓库提供 Windows 壁纸工作
+流，不宣称原创模型。超分不能保证恢复源截图中不存在的全部细节。
+
+## 本项目与官方 Real-ESRGAN 的区别
+
+| 能力 | 官方 Real-ESRGAN / NCNN-Vulkan | 本项目 |
+| --- | --- | --- |
+| 超分推理与模型 | 提供算法、模型和 Vulkan 可执行程序 | 下载并调用官方发行版，不宣称原创算法或模型 |
+| 完整构图壁纸 | 输出原始超分结果 | `preserve` 模式保留完整原图构图 |
+| 适配物理屏幕 | 需要自行指定尺寸或后处理 | 自动检测主显示器物理分辨率，并保留手动覆盖 |
+| 画面比例不一致 | 不负责壁纸构图 | 用同图的柔化模糊副本填充空余区域，前景不裁切 |
+| 批量壁纸 | 上游程序有自己的文件/文件夹输入方式 | 增加多输入、递归、单图失败隔离和汇总日志 |
+| 对比图 | 官方可执行程序不生成 | 默认自动生成可重复的细节前后对比图 |
+| Windows 上手流程 | 提供程序与上游说明 | 增加校验安装、本地 Python 环境、拖放、快捷方式和修复指引 |
+| Agent / 自然语言调用 | 直接提供命令行参数 | 把自然语言壁纸需求映射为文档化的封装参数 |
+
+真正执行超分的是上游项目。本仓库的独立价值，是围绕上游推理整理出的 Windows 壁纸工作流。
+
+## Agent Skill（进阶）
 
 完成安装后，Agent 可以把自然语言需求转换成与命令行完全相同、可复现的本地封装命令。例如：
 
@@ -62,21 +84,6 @@ Agent 不会替代或重新实现推理：
          -> 官方 realesrgan-ncnn-vulkan.exe
          -> 官方模型 / ncnn / Vulkan
 ```
-
-## 本项目与官方 Real-ESRGAN 的区别
-
-| 能力 | 官方 Real-ESRGAN / NCNN-Vulkan | 本项目 |
-| --- | --- | --- |
-| 超分推理与模型 | 提供算法、模型和 Vulkan 可执行程序 | 下载并调用官方发行版，不宣称原创算法或模型 |
-| 完整构图壁纸 | 输出原始超分结果 | `preserve` 模式保留完整原图构图 |
-| 适配物理屏幕 | 需要自行指定尺寸或后处理 | 自动检测主显示器物理分辨率，并保留手动覆盖 |
-| 画面比例不一致 | 不负责壁纸构图 | 用同图的柔化模糊副本填充空余区域，前景不裁切 |
-| 批量壁纸 | 上游程序有自己的文件/文件夹输入方式 | 增加多输入、递归、单图失败隔离和汇总日志 |
-| 对比图 | 官方可执行程序不生成 | 默认自动生成可重复的细节前后对比图 |
-| Windows 上手流程 | 提供程序与上游说明 | 增加校验安装、本地 Python 环境、拖放、快捷方式和修复指引 |
-| Agent / 自然语言调用 | 直接提供命令行参数 | 把自然语言壁纸需求映射为文档化的封装参数 |
-
-真正执行超分的是上游项目。本仓库的独立价值，是围绕上游推理整理出的 Windows 壁纸工作流。
 
 ## 环境要求
 
@@ -186,9 +193,9 @@ Agent 不会替代或重新实现推理：
 | 手动 GPU ID 被拒绝 | 查看命令输出的设备列表，传入其中的数字 ID，或改用 `--gpu auto` |
 | 图片损坏或格式不受支持 | 重新导出为有效的 JPG、JPEG、PNG 或 WebP，再运行批次 |
 
-## 重建演示排版
+## 重建视觉素材
 
-仓库用脚本保证概览图可重复生成，不依赖手工拼图：
+仓库用脚本保证视觉素材可重复生成，不依赖手工拼图。项目自有 demo 的重建命令是：
 
 ```powershell
 python .\scripts\build_original_demo.py `
@@ -199,11 +206,24 @@ python .\scripts\build_demo_assets.py `
   --upscaled "C:\Demo\original_realesrgan_4x.png" `
   --wallpaper "C:\Demo\original_wallpaper.jpg" `
   --overview ".\docs\assets\workflow-overview.jpg" `
-  --social-preview ".\docs\assets\social-preview.jpg"
+  --social-preview ".\Wallpaper Upscaler Output\demo-social-preview.jpg"
 ```
 
 仓库自带源图是带四种彩色边角标记的项目原创技术场景。三联图中的每个面板都会完整
-contain-fit，不裁切内容；替换素材时仍应只使用自己创作或明确获准再分发的原图。
+contain-fit，不裁切内容。
+
+当前宣传预览由两张已选对比素材重建：
+
+```powershell
+python .\scripts\build_promotion_assets.py `
+  --detail ".\docs\assets\promotion\k-on-detail-comparison-4x.png" `
+  --desktop-comparison ".\docs\assets\promotion\k-on-desktop-comparison.png" `
+  --output ".\docs\assets\social-preview.jpg"
+```
+
+K-ON! 示例不是项目自有 MIT 素材；复用或发布前请阅读
+[宣传素材声明](docs/assets/promotion/NOTICE.md)。替换素材时仍应只使用自己创作或明确获准
+再分发的原图。
 
 ## 上游署名与许可证
 
