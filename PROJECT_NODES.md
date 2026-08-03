@@ -17,7 +17,9 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
   The formal v0.2.0 release has a recorded Day 0 Star baseline, and v0.2.1 carries the first
   installer hotfix without changing the inference workflow. The v0.2.2 Skill-conflict hotfix is
   published from protected `main`, and its downloaded Windows ZIP completed the release
-  verification path while preserving the existing Codex Skill Junction.
+  verification path while preserving the existing Codex Skill Junction. An ordinary-user-first
+  screenshot-promotion candidate is locally complete on `codex/anime-screenshot-promotion` at
+  content commit `dec4131`; it has not been pushed or submitted as a PR.
 - Version: v0.2.0, v0.2.1, and v0.2.2 are published from protected `main`. v0.2.1 fixes Windows
   PowerShell 5.1 native stderr handling; v0.2.2 fixes optional Skill registration conflicts.
 - Last verified result: Real 2x, 3x, and 4x runs completed on GPU 0, NVIDIA GeForce RTX 5070 Ti
@@ -70,9 +72,11 @@ in the first 30 calendar days after a separately authorized v0.2.0 release.
   official Python 3.12 per-user through winget after consent, verifies the official archive, and
   requires the executable plus all pinned 2x/3x/4x model files. The launcher re-enters setup if
   any required local component is missing.
-- The checked-in demo source is generated deterministically by `scripts\build_original_demo.py`
-  and is an original MIT-licensed technical scene. Comparison, overview, and social-preview
-  assets now derive from that source and a real official Real-ESRGAN 4x run.
+- The original technical demo source is generated deterministically by
+  `scripts\build_original_demo.py` and remains MIT-licensed project content. The promotion files
+  under `docs\assets\promotion\` and the current `docs\assets\social-preview.jpg` instead derive
+  from a user-supplied K-ON! screenshot. They are not licensed under this repository's MIT License;
+  retain the exact notice, contact route, and removal map in `docs\assets\promotion\NOTICE.md`.
 - A 30-Star first-month target is a post-release outcome metric, not a forecast or engineering
   guarantee. Record an auditable public Star baseline immediately before release and assess net
   new Stars at the 30-day checkpoint.
@@ -219,6 +223,23 @@ cache freshly rechecked against pinned SHA-256
 `abc02804e17982a3be33675e4d471e91ea374e65b70167abc09e31acb412802d`; the preceding live download
 reached 16,612,866 bytes before that partial was preserved separately.
 
+On 2026-08-03, the local screenshot-promotion candidate at content commit `dec4131` passed 88
+Python tests, 33 setup assertions, 9 launcher assertions, compile/help checks, whitespace checks,
+and the tracked upstream executable/model/DLL boundary. Both README files lead with the ordinary
+user screenshot outcome, place the Real-ESRGAN distinction before advanced Agent material, resolve
+all relative images, and link the explicit unlicensed-asset notice. Original-resolution review
+confirmed the same K-ON! evidence chain, readable 4x labels, full-composition wallpaper, vertical
+desktop layout without the lower green border, and a non-overlapping 1280x640 social preview. The
+checked SHA-256 values are source `0cac28576ba219aeaec8bed9378f71dc3e0a7d31b1f4923acc0b72a0230052a3`,
+detail `b316c65718f8ac2e6d14da6077406ee71766a75850b7a01e0469e845adbebe94`, wallpaper
+`22cf61076f816038d3fa855ee18af7d616261c9b31c24bd2054ef14d731321c6`, desktop
+`f6f5e4090d118704ff2054b38c645a8e5f5804648ea22cfdf9bfbf168523713e`, and social preview
+`3e39ea5252c895ba21be484a92d3fc8ce09960cbf26f5cb0649966d5082ed95e`. The selected detail and
+desktop files directly match the authoritative files under
+`C:\Users\Capricorn\Desktop\umawallpaper\test\select`. A read-only public API check reported a
+public repository and 0 Stars; the launch validator reported day 7 of 30, goal in progress. No
+measurement row was written.
+
 ## Blockers And Risks
 
 - The first-month Star goal starts from the recorded baseline of 0. It remains an outcome target,
@@ -226,6 +247,9 @@ reached 16,612,866 bytes before that partial was preserved separately.
 - Real-ESRGAN executable and model files remain external, ignored dependencies.
 - GitHub homepage and custom social preview remain optional public-positioning decisions.
   Announcement and external channel placement require separate authorization.
+- The K-ON! promotion assets have no established redistribution license and are not covered by the
+  repository MIT License. Keep the non-affiliation/takedown notice intact and be prepared to remove
+  the exact derived set; a notice does not create permission or eliminate infringement risk.
 - The immutable v0.2.0 source archive contains the PowerShell stderr warning bug; users should
   install v0.2.1 or newer for the corrected setup behavior.
 - The immutable v0.2.1 installer can still abort when the default Codex Skill destination already
@@ -234,20 +258,16 @@ reached 16,612,866 bytes before that partial was preserved separately.
 
 ## Next Session
 
-1. Read this file, `docs\release\launch-forecast.md`, and `docs\release\evidence\release-day.md`;
-   inspect protected `main`, merged PRs #4/#5, and the v0.2.2 Release.
-2. Collect the real day 1/3/7/14/30 Star checkpoints in `docs\release\measurement.csv` and keep
-   timestamped evidence for every observation.
-3. Keep announcements and external channel placement separate from the technical Release unless
-   the user explicitly authorizes them.
-4. The user will handle any optional recording; do not make it an engineering release blocker.
+1. Inspect `codex/anime-screenshot-promotion` and this Task 7 evidence. Obtain explicit approval
+   before pushing the branch and creating a Draft PR; neither action has occurred locally.
+2. Keep Ready/merge, GitHub social-preview upload, Release edit/new Release, every external post,
+   and every `docs\release\measurement.csv` write as separate authorization gates.
+3. Collect only authorized real day 14/30 Star checkpoints with timestamped evidence. The current
+   read-only observation is 0 Stars on day 7 of 30, not a forecast or failure verdict.
+4. Preserve the K-ON! non-licensing and removal notice. If challenged, remove the exact derivative
+   set and restore the deterministic project-owned demo; do not treat attribution as permission.
 5. Do not add a complex GUI merely to chase Stars; keep further work focused on setup friction,
    proof quality, bilingual discovery, Agent invocation, and confirmed channels.
-6. Verify the public v0.2.1 source download on Windows and monitor installer reports without
-   weakening the pinned official archive or license checks.
-7. Rebase `codex/anime-screenshot-promotion` onto protected `main`, then resume Tasks 2-7 from
-   `docs\superpowers\plans\2026-07-29-anime-screenshot-promotion.md`. Keep its push, PR, social
-   preview upload, Release edit, and external posts as separate authorization gates.
 
 ## Update Rule
 
