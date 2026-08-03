@@ -1,0 +1,115 @@
+name: Bug report
+description: Report an installation, launcher, or wallpaper-processing problem
+title: "[Bug]: "
+labels:
+  - bug
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for reporting a problem. Reports in English or Chinese are welcome.
+
+      Check the README repair guide and search existing issues before filing.
+      Do not include passwords, tokens, private paths, or personal information.
+      Do not upload source artwork unless it is necessary and you have permission to share it.
+
+- type: dropdown
+  id: area
+  attributes:
+    label: Affected area
+    description: Where did the problem occur?
+    options:
+      - Setup or runtime download
+      - Desktop shortcut or drag-and-drop launcher
+      - Command line or Codex Skill
+      - Image processing or generated output
+      - Other
+  validations:
+    required: true
+
+- type: input
+  id: version
+  attributes:
+    label: Package version
+    description: State the Release or commit you used.
+    placeholder: "Example: v0.2.2"
+  validations:
+    required: true
+
+- type: dropdown
+  id: launch_method
+  attributes:
+    label: Launch method
+    options:
+      - install.cmd
+      - Desktop shortcut or drag-and-drop
+      - scripts/run-wallpaper.cmd
+      - Command line
+      - Codex Skill
+      - Other
+  validations:
+    required: true
+
+- type: textarea
+  id: environment
+  attributes:
+    label: Windows and GPU environment
+    description: Include Windows version, GPU model, driver version if known, and whether Vulkan works in other applications.
+    placeholder: |
+      Windows 11 24H2
+      NVIDIA GeForce RTX 4070 Laptop GPU, driver 000.00
+      Package installed from the v0.2.2 Windows ZIP
+  validations:
+    required: true
+
+- type: textarea
+  id: steps
+  attributes:
+    label: Steps to reproduce
+    description: Include the smallest reliable sequence, scale, mode, target, and command when relevant. Redact personal paths.
+    placeholder: |
+      1. Double-click install.cmd
+      2. Approve the upstream runtime download
+      3. Drag a PNG onto the desktop shortcut and choose 4x
+      4. Observe the error
+  validations:
+    required: true
+
+- type: textarea
+  id: expected
+  attributes:
+    label: Expected result
+    placeholder: Describe what you expected to happen.
+  validations:
+    required: true
+
+- type: textarea
+  id: actual
+  attributes:
+    label: Actual result
+    placeholder: Describe what happened, including the exact error message when possible.
+  validations:
+    required: true
+
+- type: textarea
+  id: logs
+  attributes:
+    label: Relevant logs
+    description: Paste the smallest relevant section from the console or anime-wallpaper-upscaler.log after removing sensitive information.
+    render: shell
+
+- type: textarea
+  id: additional_context
+  attributes:
+    label: Additional context
+    description: Add output screenshots or other context only when necessary and safe to share.
+
+- type: checkboxes
+  id: checks
+  attributes:
+    label: Submission checks
+    options:
+      - label: I searched existing issues for the same problem.
+        required: true
+      - label: I removed credentials and personal information from logs and screenshots.
+        required: true
