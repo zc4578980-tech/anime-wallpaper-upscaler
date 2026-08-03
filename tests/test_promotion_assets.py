@@ -5,10 +5,11 @@ from hashlib import sha256
 from pathlib import Path
 
 import pytest
-from PIL import Image, ImageDraw, ImageStat
+from PIL import Image, ImageChops, ImageDraw, ImageStat
 
 ROOT = Path(__file__).parents[1]
 PROMOTION = ROOT / "docs" / "assets" / "promotion"
+SOCIAL_PREVIEW_SHA256 = "3e39ea5252c895ba21be484a92d3fc8ce09960cbf26f5cb0649966d5082ed95e"
 
 CASES = [
     ("k-on-source-721x406.jpg", (721, 406), "0cac28576ba219aeaec8bed9378f71dc3e0a7d31b1f4923acc0b72a0230052a3"),
@@ -163,4 +164,13 @@ def test_checked_in_social_preview_uses_selected_comparison_assets(tmp_path: Pat
     )
 
     checked_in = ROOT / "docs" / "assets" / "social-preview.jpg"
-    assert sha256(checked_in.read_bytes()).hexdigest() == sha256(rebuilt.read_bytes()).hexdigest()
+    assert sha256(checked_in.read_bytes()).hexdigest() == SOCIAL_PREVIEW_SHA256
+
+    with Image.open(checked_in) as checked_image, Image.open(rebuilt) as rebuilt_image:
+        checked = checked_image.convert("RGB")
+        regenerated = rebuilt_image.convert("RGB")
+
+    assert checked.size == regenerated.size == (1280, 640)
+    for box in ((42, 174, 802, 604), (828, 174, 1238, 604)):
+        difference = ImageChops.difference(checked.crop(box), regenerated.crop(box))
+        assert max(ImageStat.Stat(difference).mean) < 8
